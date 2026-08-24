@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Builds dist/ — the public version of Second Screen, for Vercel or any static
+Builds dist/ — the public version of Deskscreen, for Vercel or any static
 host.
 
 The public build carries only the generative ambient engine. Spotify is left
@@ -36,7 +36,7 @@ window.CONFIG = {
 
 HEAD_EXTRAS = """<meta name="description" content="A still image and endless original ambient music, for the screen you are not working on.">
 <meta name="theme-color" content="#0b0b0f">
-<meta property="og:title" content="Second Screen">
+<meta property="og:title" content="Deskscreen">
 <meta property="og:description" content="A still image and endless original ambient music, for the screen you are not working on.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0b0f'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23f8f6f2' stroke-opacity='.55' stroke-width='1.5'/%3E%3Cpath d='M13.5 11.4v9.2a.6.6 0 0 0 .92.5l7.1-4.6a.6.6 0 0 0 0-1L14.42 10.9a.6.6 0 0 0-.92.5z' fill='%23f8f6f2'/%3E%3C/svg%3E">

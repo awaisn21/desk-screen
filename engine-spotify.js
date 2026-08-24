@@ -22,7 +22,8 @@ window.EngineSpotify = (function () {
     "playlist-read-private",
   ].join(" ");
 
-  const STORE = "second-screen:spotify";
+  const STORE = "deskscreen:spotify";
+  const OLD_STORE = "second-screen:spotify";   /* pre-rename, read once */
 
   const cfg = window.CONFIG || {};
   let ui = null;
@@ -43,7 +44,10 @@ window.EngineSpotify = (function () {
   }
 
   function load() {
-    try { return JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { return null; }
+    try {
+      const raw = localStorage.getItem(STORE) || localStorage.getItem(OLD_STORE);
+      return JSON.parse(raw || "null");
+    } catch (e) { return null; }
   }
 
   function forget() {
@@ -82,8 +86,8 @@ window.EngineSpotify = (function () {
     const verifier = randomString(96);
     const state = randomString(16);
     try {
-      sessionStorage.setItem("second-screen:verifier", verifier);
-      sessionStorage.setItem("second-screen:state", state);
+      sessionStorage.setItem("deskscreen:verifier", verifier);
+      sessionStorage.setItem("deskscreen:state", state);
     } catch (e) {
       ui.notice("Storage is blocked", "Sign-in needs session storage");
       return;
@@ -104,8 +108,8 @@ window.EngineSpotify = (function () {
   async function exchange(code) {
     let verifier = null, expected = null;
     try {
-      verifier = sessionStorage.getItem("second-screen:verifier");
-      expected = sessionStorage.getItem("second-screen:state");
+      verifier = sessionStorage.getItem("deskscreen:verifier");
+      expected = sessionStorage.getItem("deskscreen:state");
     } catch (e) {}
 
     const url = new URL(window.location.href);
@@ -250,7 +254,7 @@ window.EngineSpotify = (function () {
     await loadSdk();
 
     player = new Spotify.Player({
-      name: "Second Screen",
+      name: "Deskscreen",
       volume: typeof cfg.volume === "number" ? cfg.volume : 0.6,
       getOAuthToken: function (cb) { freshToken().then(function (t) { if (t) cb(t); }); },
     });

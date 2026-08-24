@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------
-   Second Screen — the shell.
+   Deskscreen — the shell.
 
    Shows one background — a still image or a looping clip — remembers which
    one you chose, wires the buttons and the keyboard, and hands playback to
@@ -27,13 +27,16 @@
     ? window.BACKGROUNDS
     : [{ base: "#0b0b0f", src: "art/01-dusk.jpg" }];
 
-  const CHOICE_KEY = "second-screen:background";
+  const CHOICE_KEY = "deskscreen:background";
+  const OLD_CHOICE_KEY = "second-screen:background";   /* pre-rename */
   let clip = null;      /* the <video> element, made only when one is needed */
   let current = -1;
 
   function remembered() {
     let saved = null;
-    try { saved = localStorage.getItem(CHOICE_KEY); } catch (e) {}
+    try {
+      saved = localStorage.getItem(CHOICE_KEY) || localStorage.getItem(OLD_CHOICE_KEY);
+    } catch (e) {}
     if (!saved) return -1;
     /* stored by name, so reordering or adding files does not shuffle the pick */
     for (let i = 0; i < library.length; i++) {
@@ -154,7 +157,7 @@
       if ("mediaSession" in navigator) {
         try {
           navigator.mediaSession.metadata = new window.MediaMetadata({
-            title: title, artist: artist, album: "Second Screen",
+            title: title, artist: artist, album: "Deskscreen",
           });
         } catch (e) {}
       }

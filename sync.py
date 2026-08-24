@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Second Screen — folder sync.
+Deskscreen — folder sync.
 
 Reads whatever is sitting in music/ and art/ and writes the two lists the
 page reads at load time:

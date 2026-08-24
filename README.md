@@ -1,4 +1,4 @@
-# Second Screen
+# Deskscreen
 
 A still image, edge to edge, with a small glass player over it. Three buttons.
 Nothing else. Made to be opened fullscreen on a second monitor and left there.

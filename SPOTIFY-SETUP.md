@@ -10,7 +10,7 @@ Spotify account. Click **Create app** and fill in:
 
 | Field | Value |
 |---|---|
-| App name | Second Screen |
+| App name | Deskscreen |
 | App description | Personal ambient player |
 | Redirect URI | `http://127.0.0.1:8080/` |
 | Which API/SDKs | tick **Web Playback SDK** and **Web API** |
