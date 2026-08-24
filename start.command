@@ -1,12 +1,12 @@
 #!/bin/bash
-# Double-click to run Deskscreen.
+# Double-click to run Desk Screen.
 # Serves the folder on 127.0.0.1 — Spotify sign-in requires that, and local
 # audio files work the same way.
 
 cd "$(dirname "$0")" || exit 1
 PORT=8080   # must match "port" in config.js and your Spotify Redirect URI
 
-echo "Deskscreen"
+echo "Desk Screen"
 echo "-------------"
 python3 sync.py || { echo; echo "sync failed — is python3 installed?"; read -r -p "press return to close"; exit 1; }
 echo

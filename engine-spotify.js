@@ -22,7 +22,7 @@ window.EngineSpotify = (function () {
     "playlist-read-private",
   ].join(" ");
 
-  const STORE = "deskscreen:spotify";
+  const STORE = "desk-screen:spotify";
   const OLD_STORE = "second-screen:spotify";   /* pre-rename, read once */
 
   const cfg = window.CONFIG || {};
@@ -86,8 +86,8 @@ window.EngineSpotify = (function () {
     const verifier = randomString(96);
     const state = randomString(16);
     try {
-      sessionStorage.setItem("deskscreen:verifier", verifier);
-      sessionStorage.setItem("deskscreen:state", state);
+      sessionStorage.setItem("desk-screen:verifier", verifier);
+      sessionStorage.setItem("desk-screen:state", state);
     } catch (e) {
       ui.notice("Storage is blocked", "Sign-in needs session storage");
       return;
@@ -108,8 +108,8 @@ window.EngineSpotify = (function () {
   async function exchange(code) {
     let verifier = null, expected = null;
     try {
-      verifier = sessionStorage.getItem("deskscreen:verifier");
-      expected = sessionStorage.getItem("deskscreen:state");
+      verifier = sessionStorage.getItem("desk-screen:verifier");
+      expected = sessionStorage.getItem("desk-screen:state");
     } catch (e) {}
 
     const url = new URL(window.location.href);
@@ -254,7 +254,7 @@ window.EngineSpotify = (function () {
     await loadSdk();
 
     player = new Spotify.Player({
-      name: "Deskscreen",
+      name: "Desk Screen",
       volume: typeof cfg.volume === "number" ? cfg.volume : 0.6,
       getOAuthToken: function (cb) { freshToken().then(function (t) { if (t) cb(t); }); },
     });
