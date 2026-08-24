@@ -1,0 +1,16 @@
+# your own music — never published
+music/*
+!music/README.txt
+
+# generated on every run
+tracks.js
+dist/
+
+# your Spotify client id and playlist live here; copy config.example.js
+config.js
+
+# things parked out of rotation
+_stale/
+.build-keep-*
+
+.DS_Store
