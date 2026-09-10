@@ -123,6 +123,24 @@ window.EngineAmbient = (function () {
       cutoff: [240, 700],
       drone: 0.22,
     },
+    {
+      name: "Old House",
+      note: "warm, high, half-remembered",
+      root: 523.25,                       /* C5 — bright, childhood register */
+      scale: [0, 2, 4, 7, 9, 12],         /* C major pentatonic, simple */
+      cycle: [0, 2, -2, 0],
+      cycleSeconds: 360,
+      gapRange: [6, 16],
+      partials: [
+        { ratio: 1,    gain: 0.44 },
+        { ratio: 2,    gain: 0.22, detune: -4 },
+        { ratio: 3.01, gain: 0.09 },
+        { ratio: 4.02, gain: 0.04 },
+      ],
+      attack: [0.4, 1.4], release: [5, 9],
+      cutoff: [1800, 4200],
+      drone: 0.04,
+    },
   ];
 
   let ui = null;
@@ -246,7 +264,7 @@ window.EngineAmbient = (function () {
     const now = ctx.currentTime;
     const bus = ctx.createGain();
     bus.gain.setValueAtTime(0.0001, now);
-    bus.gain.exponentialRampToValueAtTime(piece.drone, now + 5);
+    bus.gain.exponentialRampToValueAtTime(piece.drone, now + 1.8);
 
     const filter = ctx.createBiquadFilter();
     filter.type = "lowpass";
@@ -350,7 +368,7 @@ window.EngineAmbient = (function () {
     const t = ctx.currentTime;
     master.gain.cancelScheduledValues(t);
     master.gain.setValueAtTime(0.0001, t);
-    master.gain.exponentialRampToValueAtTime(0.8, t + 2);
+    master.gain.exponentialRampToValueAtTime(0.8, t + 0.6);
 
     drone = startDrone(piece);
     /* one note straight away so it does not open on silence */
@@ -364,13 +382,13 @@ window.EngineAmbient = (function () {
 
   function change(step) {
     const wasPlaying = playing;
-    stopSound(0.9);
+    stopSound(0.35);
     index = (index + step + PIECES.length) % PIECES.length;
     const piece = PIECES[index];
     ui.track(piece.name, piece.note);
     ui.progress(0);
     if (!wasPlaying) { ui.playing(false); return; }
-    setTimeout(function () { if (ctx) startSound(); }, 950);
+    setTimeout(function () { if (ctx) startSound(); }, 120);
   }
 
   return {
@@ -380,7 +398,13 @@ window.EngineAmbient = (function () {
 
     init: function (hooks) {
       ui = hooks;
-      index = Math.floor(Math.random() * PIECES.length);
+      /* pick a starting piece by the hour so the environment matches the day */
+      var h = new Date().getHours();
+      if      (h >= 5  && h < 10) index = 6;  /* Old House  — nostalgic morning    */
+      else if (h >= 10 && h < 16) index = 0;  /* Glass Bay  — clear, focused day   */
+      else if (h >= 16 && h < 20) index = 1;  /* Long Dusk  — golden hour          */
+      else if (h >= 20 && h < 23) index = 3;  /* Harbour    — late evening drift   */
+      else                         index = 5;  /* Nightfloor — deep night           */
       const piece = PIECES[index];
       ui.track(piece.name, piece.note);
       ui.playing(false);
@@ -395,7 +419,7 @@ window.EngineAmbient = (function () {
       }
       if (ctx.state === "suspended") ctx.resume();
 
-      if (playing) { stopSound(1.5); ui.playing(false); }
+      if (playing) { stopSound(0.4); ui.playing(false); }
       else startSound();
     },
 

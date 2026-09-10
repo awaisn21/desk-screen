@@ -9,8 +9,15 @@ dist/
 # your Spotify client id and playlist live here; copy config.example.js
 config.js
 
-# things parked out of rotation
+# things parked out of rotation — never publish these
 _stale/
+_quarantine/
 .build-keep-*
 
 .DS_Store
+
+# anything parked in a subfolder is not part of the site
+art/*/
+video/*/
+.vercel
+.env*

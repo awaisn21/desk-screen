@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>Desk Screen</title>
+<meta name="description" content="A focus environment for your second monitor. Original generative ambient music, curated art, and a daily intention — made to be opened and left alone.">
+
+<meta property="og:title" content="Desk Screen">
+<meta property="og:description" content="A focus environment for your second monitor. Original generative ambient music, curated art, and a daily intention.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://desk-screen.vercel.app">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Desk Screen">
+<meta name="twitter:description" content="A focus environment for your second monitor. Original generative ambient music, curated art, and a daily intention.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +24,16 @@
 <body>
 
 <div id="stage"></div>
+
+<!-- Session intention: set once a day, displayed above the player -->
+<div id="intention-wrap" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Set your focus intention for today">
+  <p class="intention-q">What are you working on?</p>
+  <input id="intention-input" class="intention-input" type="text"
+         placeholder="your work for today" autocomplete="off" spellcheck="false" maxlength="80">
+  <p class="intention-hint">enter to set &nbsp;·&nbsp; esc to skip &nbsp;·&nbsp; i to change later</p>
+</div>
+
+<div id="intention-display" aria-live="polite"></div>
 
 <button class="background" id="background" type="button" aria-label="Change background">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
@@ -70,5 +90,6 @@
 <script src="engine-files.js"></script>
 <script src="engine-ambient.js"></script>
 <script src="app.js"></script>
+<script src="intention.js"></script>
 </body>
 </html>

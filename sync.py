@@ -32,7 +32,7 @@ ART_DIR = os.path.join(ROOT, "art")
 VIDEO_DIR = os.path.join(ROOT, "video")
 
 AUDIO_EXT = {".mp3", ".m4a", ".aac", ".wav", ".ogg", ".oga", ".opus", ".flac", ".weba"}
-IMAGE_EXT = {".jpg", ".jpeg", ".png", ".webp", ".avif"}
+IMAGE_EXT = {".jpg", ".jpeg", ".png", ".webp", ".avif", ".svg"}
 VIDEO_EXT = {".mp4", ".webm", ".mov", ".m4v"}
 
 FFPROBE = shutil.which("ffprobe")
@@ -159,13 +159,39 @@ def poster_for(name):
     return None
 
 
+def remembered_bases():
+    """Base colours already in backgrounds.js. Vector art cannot be measured
+    by ffmpeg, so a good value once written is worth keeping."""
+    known = {}
+    path = os.path.join(ROOT, "backgrounds.js")
+    if not os.path.exists(path):
+        return known
+    try:
+        with open(path, encoding="utf-8") as f:
+            for line in f:
+                src = re.search(r'"(?:src|video)":\s*"([^"]+)"', line)
+                base = re.search(r'"base":\s*"(#[0-9a-fA-F]{6})"', line)
+                if src and base:
+                    known[src.group(1)] = base.group(1)
+    except Exception:
+        pass
+    return known
+
+
 def write_backgrounds():
     entries = []
+    known = remembered_bases()
+
+    def base_for(path, key):
+        if path.lower().endswith(".svg"):
+            return known.get(key, "#0b0b0f")
+        measured = average_colour(path)
+        return known.get(key, measured) if measured == "#0b0b0f" else measured
 
     for n in listing(VIDEO_DIR, VIDEO_EXT):
         entries.append({
             "name": pretty(os.path.splitext(n)[0]),
-            "base": average_colour(os.path.join(VIDEO_DIR, n)),
+            "base": base_for(os.path.join(VIDEO_DIR, n), "video/" + n),
             "video": "video/" + n,
             "poster": poster_for(n),
         })
@@ -173,7 +199,7 @@ def write_backgrounds():
     for n in listing(ART_DIR, IMAGE_EXT):
         entries.append({
             "name": pretty(os.path.splitext(n)[0]),
-            "base": average_colour(os.path.join(ART_DIR, n)),
+            "base": base_for(os.path.join(ART_DIR, n), "art/" + n),
             "src": "art/" + n,
         })
 

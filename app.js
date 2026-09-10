@@ -51,9 +51,95 @@
     } catch (e) {}
   }
 
+  /* Each artwork gets a canvas of its own, drawn once while the page is idle.
+     A canvas keeps its pixels whether or not it is visible, so after that
+     first draw, changing artwork is only a change of which canvas is on top —
+     no vector work left at the moment you click.
+
+     Drawing costs real time for detailed art (Hill Town is 3 MB of paths), so
+     it happens up front, spread across idle moments, never on the click. */
+
+  const canvases = library.map(makeCanvas);
+  const drawn = library.map(function () { return false; });
+
+  function makeCanvas() {
+    const c = document.createElement("canvas");
+    c.className = "plate";
+    c.setAttribute("aria-hidden", "true");
+    stage.appendChild(c);
+    return c;
+  }
+
+  function wrapIndex(i) {
+    return ((i % library.length) + library.length) % library.length;
+  }
+
+  function targetSize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const cap = 2560;                       /* enough for any laptop display */
+    let w = Math.round(window.innerWidth * dpr);
+    let h = Math.round(window.innerHeight * dpr);
+    if (w > cap) { h = Math.round(h * (cap / w)); w = cap; }
+    return { w: Math.max(1, w), h: Math.max(1, h) };
+  }
+
+  /* draw one artwork into its canvas, cropped like background-size: cover */
+  function paint(i) {
+    const entry = library[i];
+    const src = entry.src || entry.poster;
+    const canvas = canvases[i];
+    if (!src || !canvas) return Promise.resolve(false);
+
+    const size = targetSize();
+    return new Promise(function (done) {
+      const img = new Image();
+      img.decoding = "async";
+      img.onload = function () {
+        canvas.width = size.w;
+        canvas.height = size.h;
+        const ctx = canvas.getContext("2d", { alpha: false });
+        const iw = img.naturalWidth || size.w;
+        const ih = img.naturalHeight || size.h;
+        const scale = Math.max(size.w / iw, size.h / ih);
+        const dw = iw * scale;
+        const dh = ih * scale;
+        ctx.imageSmoothingQuality = "high";
+        ctx.fillStyle = entry.base || "#0b0b0f";
+        ctx.fillRect(0, 0, size.w, size.h);
+        ctx.drawImage(img, (size.w - dw) / 2, (size.h - dh) / 2, dw, dh);
+        drawn[i] = true;
+        done(true);
+      };
+      img.onerror = function () { done(false); };
+      img.src = src;
+    });
+  }
+
+  function reveal(i) {
+    canvases.forEach(function (c, n) { c.classList.toggle("on", n === i); });
+  }
+
+  /* draw everything that is not drawn yet, one at a time, while idle */
+  function warmArtwork() {
+    const queue = [];
+    for (let n = 1; n <= library.length; n++) {
+      const i = wrapIndex(current + n);
+      if (!drawn[i] && !library[i].video) queue.push(i);
+    }
+    (function step() {
+      const i = queue.shift();
+      if (i === undefined) return;
+      paint(i).then(function () {
+        if (window.requestIdleCallback) requestIdleCallback(step, { timeout: 900 });
+        else setTimeout(step, 60);
+      });
+    })();
+  }
+
   function show(index) {
-    const entry = library[((index % library.length) + library.length) % library.length];
-    current = library.indexOf(entry);
+    const want = wrapIndex(index);
+    const entry = library[want];
+    current = want;
 
     stage.style.backgroundColor = entry.base || "#0b0b0f";
 
@@ -61,46 +147,53 @@
       && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (entry.video && !stillOnly) {
-      /* the poster fills the frame while the first frames arrive */
-      stage.style.backgroundImage = entry.poster ? 'url("' + entry.poster + '")' : "none";
-
+      canvases.forEach(function (c) { c.classList.remove("on"); });
       if (!clip) {
         clip = document.createElement("video");
-        clip.muted = true;
-        clip.loop = true;
-        clip.autoplay = true;
-        clip.playsInline = true;
-        clip.setAttribute("muted", "");
-        clip.setAttribute("playsinline", "");
+        clip.muted = true; clip.loop = true; clip.autoplay = true; clip.playsInline = true;
+        clip.setAttribute("muted", ""); clip.setAttribute("playsinline", "");
         clip.setAttribute("aria-hidden", "true");
         clip.className = "clip";
         stage.appendChild(clip);
       }
       clip.hidden = false;
-      if (entry.poster) clip.poster = entry.poster;
       clip.src = entry.video;
       const attempt = clip.play();
       if (attempt && attempt.catch) attempt.catch(function () {});
-    } else {
-      if (clip) { clip.pause(); clip.removeAttribute("src"); clip.load(); clip.hidden = true; }
-      const still = entry.src || entry.poster;
-      if (!still) { stage.style.backgroundImage = "none"; }
-      else {
-        const img = new Image();
-        img.onload = function () {
-          if (library[current] === entry) stage.style.backgroundImage = 'url("' + still + '")';
-        };
-        img.src = still;
-      }
+      label(entry);
+      return;
     }
 
-    if (background) {
-      background.setAttribute(
-        "title",
-        entry.name ? entry.name + " — click for the next background" : "Change background"
-      );
+    if (clip) { clip.pause(); clip.removeAttribute("src"); clip.load(); clip.hidden = true; }
+
+    if (drawn[want]) {
+      reveal(want);                       /* the common case: instant */
+    } else {
+      paint(want).then(function () { if (current === want) reveal(want); });
     }
+    label(entry);
   }
+
+  function label(entry) {
+    if (!background) return;
+    background.setAttribute(
+      "title",
+      entry.name ? entry.name + " — click for the next background" : "Change background"
+    );
+  }
+
+  /* a resized window means every canvas is the wrong size now */
+  let resizeTimer = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      const size = targetSize();
+      const c = canvases[current];
+      if (c && c.width === size.w && c.height === size.h) return;
+      for (let i = 0; i < drawn.length; i++) drawn[i] = false;
+      paint(current).then(function () { reveal(current); warmArtwork(); });
+    }, 300);
+  });
 
   const background = document.getElementById("background");
 
@@ -122,8 +215,32 @@
     else { const a = clip.play(); if (a && a.catch) a.catch(function () {}); }
   });
 
+
+  /* Pick an artwork that matches the time of day when no preference is saved.
+     Names are substrings of the 'name' field in backgrounds.js. */
+  function timeBasedArtIndex() {
+    var h = new Date().getHours();
+    var sets;
+    if      (h >= 5  && h < 11) sets = ["ocean-shore", "alpine-valley"];
+    else if (h >= 11 && h < 17) sets = ["focus-landscape", "hill-town"];
+    else if (h >= 17 && h < 21) sets = ["sunset-bay", "crimson-eclipse"];
+    else                         sets = ["aurora-watch", "nightfloor"];
+
+    for (var s = 0; s < sets.length; s++) {
+      for (var k = 0; k < library.length; k++) {
+        var name = library[k].name || library[k].src || "";
+        if (name.indexOf(sets[s]) !== -1) return k;
+      }
+    }
+    return Math.floor(Math.random() * library.length);
+  }
+
   const start = remembered();
-  show(start >= 0 ? start : Math.floor(Math.random() * library.length));
+  show(start >= 0 ? start : timeBasedArtIndex());
+
+  /* fetch the rest once the first one is on screen */
+  if (window.requestIdleCallback) requestIdleCallback(warmArtwork, { timeout: 1500 });
+  else setTimeout(warmArtwork, 300);
 
   /* ---- the pill ---------------------------------------------------------- */
 
@@ -135,6 +252,8 @@
   const titleEl = document.getElementById("title");
   const artistEl = document.getElementById("artist");
   const ring = document.getElementById("ring");
+
+  let sounding = false;     /* is anything actually audible right now */
 
   const CIRCUMFERENCE = 2 * Math.PI * 21.25;
   ring.setAttribute("stroke-dasharray", CIRCUMFERENCE.toFixed(2));
@@ -169,6 +288,7 @@
     },
 
     playing: function (isPlaying) {
+      sounding = isPlaying;
       playIcon.setAttribute("d", isPlaying ? PAUSE_PATH : PLAY_PATH);
       playBtn.setAttribute("data-state", isPlaying ? "playing" : "paused");
       playBtn.setAttribute("aria-label", isPlaying ? "Pause" : "Play");
@@ -216,6 +336,37 @@
     if (!engine) return;
     try { engine[method](); } catch (e) {}
   }
+
+  function autostart() {
+    if (!engine) return;
+    call("toggle");                       /* allowed in some browsers */
+
+    setTimeout(function () {
+      if (sounding) return;               /* it worked, nothing to arm */
+      const kick = function () {
+        if (sounding) { release(); return; }
+        call("toggle");
+        release();
+      };
+      const release = function () {
+        ["pointerdown", "keydown", "wheel", "touchstart"].forEach(function (e) {
+          window.removeEventListener(e, kick, true);
+        });
+      };
+      ["pointerdown", "keydown", "wheel", "touchstart"].forEach(function (e) {
+        window.addEventListener(e, kick, { capture: true, once: false });
+      });
+    }, 500);
+  }
+
+  autostart();
+
+  /* Auto-drift: change the background every 8-12 minutes so the screen
+     feels alive. Uses nextBackground() which also saves the pick. */
+  (function scheduleDrift() {
+    var delay = (8 + Math.random() * 4) * 60 * 1000;
+    setTimeout(function () { nextBackground(); scheduleDrift(); }, delay);
+  })();
 
   playBtn.addEventListener("click", function () { call("toggle"); });
   nextBtn.addEventListener("click", function () { call("next"); });

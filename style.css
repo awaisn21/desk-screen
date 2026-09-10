@@ -207,3 +207,112 @@ button:focus-visible {
 
 /* ---- status line, used while connecting or when something needs saying ---- */
 .player[data-state="notice"] .title { font-style: italic; color: var(--ink-muted); }
+
+/* each still sits in its own layer, painted once, so changing artwork is
+   only a change of which layer is visible */
+.plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  /* keep each artwork on its own compositor layer, so revealing one is a
+     GPU flip rather than an upload */
+  will-change: opacity;
+  transform: translateZ(0);
+  transition: opacity 2.2s ease;
+}
+
+.plate.on { opacity: 1; }
+
+
+/* ---- session intention -------------------------------------------------- */
+
+#intention-wrap {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s ease;
+  background: rgba(11, 11, 15, 0.15);
+}
+
+#intention-wrap.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.intention-q {
+  margin: 0 0 20px;
+  font-family: "Newsreader", ui-serif, Georgia, serif;
+  font-size: 17px;
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(248, 246, 242, 0.50);
+  letter-spacing: 0.01em;
+}
+
+.intention-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(248, 246, 242, 0.20);
+  color: rgba(248, 246, 242, 0.92);
+  font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  text-align: center;
+  width: min(500px, calc(100vw - 80px));
+  padding: 8px 0 12px;
+  outline: none;
+  letter-spacing: -0.01em;
+  caret-color: rgba(255, 247, 234, 0.70);
+}
+
+.intention-input::placeholder {
+  color: rgba(248, 246, 242, 0.17);
+}
+
+.intention-hint {
+  margin: 16px 0 0;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(248, 246, 242, 0.18);
+}
+
+/* Faint italic line shown above the player once the intention is set */
+#intention-display {
+  position: fixed;
+  left: 50%;
+  bottom: 116px;
+  transform: translateX(-50%);
+  max-width: min(480px, calc(100vw - 80px));
+  font-family: "Newsreader", ui-serif, Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(248, 246, 242, 0.28);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#intention-display.on { opacity: 1; }
+
+@media (max-width: 520px) {
+  .intention-input { font-size: 20px; }
+  #intention-display { bottom: 100px; }
+}

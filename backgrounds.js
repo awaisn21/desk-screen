@@ -1,7 +1,10 @@
 /* Written by sync.py — your edits here are replaced on the next run. */
 window.BACKGROUNDS = [
-  {"name": "Aurora Watch", "base": "#284f53", "video": "video/aurora-watch.mp4", "poster": "video/aurora-watch.jpg"},
-  {"name": "Ocean Shore", "base": "#919993", "video": "video/ocean-shore.mp4", "poster": "video/ocean-shore.jpg"},
-  {"name": "Sunset Bay", "base": "#72325d", "video": "video/sunset-bay.mp4", "poster": "video/sunset-bay.jpg"},
-  {"name": "Sunset Valley", "base": "#425e7b", "video": "video/sunset-valley.mp4", "poster": "video/sunset-valley.jpg"},
+  {"name": "Alpine Valley", "base": "#515c68", "src": "art/alpine-valley.svg"},
+  {"name": "Aurora Watch", "base": "#1a3642", "src": "art/aurora-watch.svg"},
+  {"name": "Crimson Eclipse", "base": "#1c060a", "src": "art/crimson-eclipse.svg"},
+  {"name": "Focus Landscape", "base": "#3f5b79", "src": "art/focus-landscape.svg"},
+  {"name": "Hill Town", "base": "#785464", "src": "art/hill-town.svg"},
+  {"name": "Ocean Shore", "base": "#829395", "src": "art/ocean-shore.svg"},
+  {"name": "Sunset Bay", "base": "#72395d", "src": "art/sunset-bay.svg"},
 ];
