@@ -23,9 +23,14 @@
   ------------------------------------------------------------------------- */
 
   const stage = document.getElementById("stage");
-  const library = (Array.isArray(window.BACKGROUNDS) && window.BACKGROUNDS.length)
+  const _allBackgrounds = (Array.isArray(window.BACKGROUNDS) && window.BACKGROUNDS.length)
     ? window.BACKGROUNDS
     : [{ base: "#0b0b0f", src: "art/01-dusk.jpg" }];
+
+  /* Filter to the current theme's art set — Abstract (vector SVGs) or
+     Pakistan (pk-* photos). DeskThemes.filter() falls back to all entries
+     when the theme's art hasn't been added yet. */
+  const library = window.DeskThemes ? window.DeskThemes.filter(_allBackgrounds) : _allBackgrounds;
 
   const CHOICE_KEY = "desk-screen:background";
   const OLD_CHOICE_KEY = "second-screen:background";   /* pre-rename */
@@ -273,7 +278,7 @@
     track: function (title, artist) {
       player.setAttribute("data-state", "playing");
       text(title, artist);
-      if ("mediaSession" in navigator) {
+    if ("mediaSession" in navigator) {
         try {
           navigator.mediaSession.metadata = new window.MediaMetadata({
             title: title, artist: artist, album: "Desk Screen",
@@ -387,7 +392,27 @@
     }
   });
 
-  if ("mediaSession" in navigator) {
+  /* ---- theme toggle ---- */
+  (function () {
+    var btn   = document.getElementById("theme-toggle");
+    var label = document.getElementById("theme-label");
+    if (!btn || !window.DeskThemes) return;
+
+    var cur  = window.DeskThemes.current;
+    var next = cur === "abstract" ? "Pakistan" : "Abstract";
+    if (label) label.textContent = next;
+    btn.setAttribute("aria-label", "Switch to " + next + " theme");
+    btn.setAttribute("title",
+      "Now: " + (cur === "abstract" ? "Abstract" : "Pakistan") +
+      " • click for " + next
+    );
+
+    btn.addEventListener("click", function () {
+      window.DeskThemes.cycle();
+    });
+  })();
+
+    if ("mediaSession" in navigator) {
     try {
       navigator.mediaSession.setActionHandler("play", function () { call("toggle"); });
       navigator.mediaSession.setActionHandler("pause", function () { call("toggle"); });

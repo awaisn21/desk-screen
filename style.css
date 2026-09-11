@@ -316,3 +316,53 @@ button:focus-visible {
   .intention-input { font-size: 20px; }
   #intention-display { bottom: 100px; }
 }
+
+/* ---- theme toggle (bottom-left corner) ---- */
+.theme-toggle {
+  position: fixed;
+  left: 44px;
+  bottom: 44px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 16px 0 12px;
+  height: 44px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 999px;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+  backdrop-filter: blur(26px) saturate(150%);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 var(--glass-lift);
+  opacity: 0.42;
+  color: var(--ink);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.theme-toggle:hover { opacity: 1; }
+
+.theme-toggle-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.theme-toggle:hover .theme-toggle-label {
+  color: var(--ink);
+}
+
+.theme-icon {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  opacity: 0.8;
+}
+
+@media (max-width: 520px) {
+  .theme-toggle { left: 20px; bottom: 28px; height: 40px; padding: 0 14px 0 10px; }
+}
