@@ -1,16 +1,21 @@
 /* ---------------------------------------------------------------------------
    Copy this file to config.js and fill it in. config.js is not tracked by
-   git, so your client id stays out of the repository.
+   git, so your credentials stay out of the repository.
 
    With no config.js at all the page still runs — it falls back to the
-   built-in generative music, which is what the public build uses.
+   built-in generative ambient music, which is what the public build uses.
 --------------------------------------------------------------------------- */
 
 window.CONFIG = {
 
-  /* "auto" picks Spotify if a clientId is set, then the music/ folder, then
-     the built-in generative music. Force one with "spotify", "files"
-     or "ambient". */
+  /* "auto" picks in this order:
+       1. Spotify (if clientId is set)
+       2. music/ folder (if you have local files there)
+       3. YouTube — a curated Pakistani nostalgia playlist that streams
+          from youtube-nocookie.com; no API key required.
+       4. Generative ambient (always available, needs no files or accounts)
+
+     Force one with "spotify", "files", "youtube", or "ambient". */
   mode: "auto",
 
   /* From https://developer.spotify.com/dashboard — see SPOTIFY-SETUP.md.

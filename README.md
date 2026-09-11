@@ -10,7 +10,12 @@ Live at [desk-screen.vercel.app](https://desk-screen.vercel.app).
 
 **Art** fills the screen. Seven SVGs — all 1920×1080 viewBox vector, sharp at any resolution. The background button cycles through them; your pick is remembered by name so adding or reordering artwork never scrambles what you chose. If you haven't chosen yet, it opens on an artwork that matches the time of day. Every 8-12 minutes it quietly drifts to the next one on its own — so the screen is never exactly the same as when you left it.
 
-**Music** picks its source automatically. A `clientId` in `config.js` turns the page into a Spotify Connect device. Files in `music/` play through the local engine. If neither is set up, the generative ambient engine runs — seven original pieces composed in the browser as they play, needing no files and no network. The starting piece is chosen by the hour: something sparse and nostalgic in the morning, brighter mid-day, warmer in the evening, deep and drone-heavy at night.
+**Music** picks its source automatically in this order:
+
+1. **Spotify** — a `clientId` in `config.js` makes the page a Spotify Connect device.
+2. **Local files** — drop audio into `music/` and `sync.py` builds the track list.
+3. **YouTube** — a curated stream of Pakistani nostalgia songs (Strings, Jal, Atif Aslam, Ali Zafar, Fuzon, Noori). No API key required; youtube-nocookie.com handles licensing and tracking. Shuffled fresh every session.
+4. **Generative ambient** — seven original pieces synthesised entirely in the browser, no files and no network. The starting piece is chosen by the hour: Old House in the morning, Glass Bay mid-day, Long Dusk at golden hour, Harbour in the evening, Nightfloor deep at night.
 
 **Intention** is the third thing. On the first open of each day, a prompt appears: *What are you working on?* You type something, press Enter, and it shows up as a faint italic line above the player for the rest of the day. It resets at midnight. Press **I** to change it. It is stored only in your browser and sent nowhere.
 
@@ -56,6 +61,13 @@ All three sources expose the same interface:
 
 ---
 
+
+### PWA — installable, offline-first
+
+`manifest.json` and `sw.js` make Desk Screen installable as a native-looking app from any browser. The service worker caches the shell (HTML, CSS, JS, fonts) on first load so the screen opens instantly even on slow Wi-Fi, and works fully offline for the generative and local-files engines. Art and video are fetched network-first so newly dropped files show up without clearing the cache.
+
+The install prompt appears automatically on supported browsers. On desktop Chrome, an icon appears in the address bar.
+
 ## Running locally
 
 ```
@@ -87,6 +99,7 @@ The public build uses the generative engine only — local files cannot be hoste
 | B | Change background (also auto-drifts every 8-12 min) |
 | F | Fullscreen |
 | I | Set or change today's intention |
+| Y | Switch to YouTube engine (if configured) |
 
 macOS media keys and the Now Playing widget work via the Media Session API.
 
@@ -101,11 +114,14 @@ app.js              artwork, buttons, keyboard — knows nothing about music
 intention.js        daily focus intention — prompt, display, localStorage
 engine-spotify.js   Spotify Web Playback SDK + PKCE flow
 engine-files.js     files in music/ with dual-buffer prefetch
-engine-ambient.js   six generative pieces, synthesised entirely in the browser
+engine-youtube.js   curated Pakistani nostalgia playlist via YouTube IFrame API
+engine-ambient.js   seven generative pieces, synthesised entirely in the browser
 config.js           your settings (clientId, playlist, mode) — not in git
 sync.py             reads music/ art/ video/, writes tracks.js + backgrounds.js
 tracks.js           generated — window.TRACKS — not in git
 backgrounds.js      generated — window.BACKGROUNDS
+sw.js               service worker — offline shell cache, network-first for art
+manifest.json       PWA manifest — name, icons, display mode
 build-public.py     writes dist/ for hosting
 start.command       sync → serve → open
 vercel.json         cache headers

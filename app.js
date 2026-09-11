@@ -305,6 +305,7 @@
   const engines = {
     spotify: window.EngineSpotify,
     files: window.EngineFiles,
+    youtube: window.EngineYouTube,
     ambient: window.EngineAmbient,
   };
 
@@ -314,7 +315,7 @@
 
     /* auto: your Spotify account, then your own files, then the built-in
        generative music, which always works and needs nothing */
-    const order = ["spotify", "files", "ambient"];
+    const order = ["spotify", "files", "youtube", "ambient"];
     for (let i = 0; i < order.length; i++) {
       const engine = engines[order[i]];
       if (engine && engine.available()) return engine;
