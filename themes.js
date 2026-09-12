@@ -45,11 +45,7 @@ window.DeskThemes = (function () {
 
   /* Override music mode before app.js runs its chooseEngine() */
   if (window.CONFIG) {
-    /* Only override if the user hasn't explicitly forced a mode */
-    const forced = window.CONFIG.mode && window.CONFIG.mode !== "auto";
-    if (!forced) {
-      window.CONFIG.mode = MUSIC[current];
-    }
+    window.CONFIG.mode = MUSIC[current];
   }
 
   /* ---- public API ---- */
@@ -74,14 +70,14 @@ window.DeskThemes = (function () {
     filter: function (library) {
       if (current === "pakistan") {
         const pk = library.filter(function (e) {
-          const id = e.name || e.src || e.video || "";
+          const id = [(e.name || ""), (e.src || ""), (e.video || "")].join("|");
           return id.indexOf("pk-") !== -1;
         });
         return pk.length ? pk : library;   /* graceful fallback until photos exist */
       }
       /* abstract: everything that is not a Pakistani photo */
       const abs = library.filter(function (e) {
-        const id = e.name || e.src || e.video || "";
+        const id = [(e.name || ""), (e.src || ""), (e.video || "")].join("|");
         return id.indexOf("pk-") === -1;
       });
       return abs.length ? abs : library;
