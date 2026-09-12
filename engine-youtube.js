@@ -44,12 +44,13 @@ window.EngineYouTube = (function () {
     return a;
   }
 
-  let ui       = null;
-  let player   = null;
-  let queue    = [];
-  let cursor   = 0;
-  let playing  = false;
-  let apiReady = false;
+  let ui          = null;
+  let player      = null;
+  let queue       = [];
+  let cursor      = 0;
+  let playing     = false;
+  let apiReady    = false;
+  let pendingPlay = false;   /* toggle() called before player was ready */
 
   /* ---- public interface ---- */
 
@@ -96,10 +97,11 @@ window.EngineYouTube = (function () {
     },
 
     toggle: function () {
-      if (!player) return;
+      if (!player) { pendingPlay = !pendingPlay; return; }
       try {
         if (playing) {
           player.pauseVideo();
+          pendingPlay = false;
         } else {
           player.playVideo();
         }
@@ -149,6 +151,7 @@ window.EngineYouTube = (function () {
       events: {
         onReady: function () {
           done();
+          if (pendingPlay) { try { player.playVideo(); } catch (e) {} }
         },
         onStateChange: onState,
         onError:       onError,

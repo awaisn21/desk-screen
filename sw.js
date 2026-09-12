@@ -10,7 +10,7 @@
    new art you drop into art/ shows up without clearing cache.
 --------------------------------------------------------------------------- */
 
-const CACHE = "desk-screen-v1";
+const CACHE = "desk-screen-v2";
 
 /* Shell assets — cached on install, served from cache indefinitely */
 const SHELL = [
@@ -26,6 +26,7 @@ const SHELL = [
   "/config.js",
   "/tracks.js",
   "/backgrounds.js",
+  "/themes.js",
 ];
 
 self.addEventListener("install", function (e) {
