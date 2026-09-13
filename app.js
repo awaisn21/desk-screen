@@ -267,11 +267,28 @@
   const PLAY_PATH = "M7 4.6v14.8a.9.9 0 0 0 1.38.76l11.4-7.4a.9.9 0 0 0 0-1.52L8.38 3.84A.9.9 0 0 0 7 4.6z";
   const PAUSE_PATH = "M6.6 4h3.4v16H6.6zM14 4h3.4v16H14z";
 
+  function applyMarquee(el) {
+    el.classList.remove("marquee");
+    el.style.animationDuration = "";
+    var probe = el.cloneNode(true);
+    probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;overflow:visible;width:auto;animation:none;";
+    document.body.appendChild(probe);
+    var textWidth = probe.scrollWidth;
+    document.body.removeChild(probe);
+    var slotWidth = el.parentElement ? el.parentElement.offsetWidth : 160;
+    if (textWidth > slotWidth) {
+      el.textContent = el.textContent + "      " + el.textContent;
+      el.classList.add("marquee");
+      el.style.animationDuration = Math.round(textWidth / 45) + "s";
+    }
+  }
+
   function text(title, artist) {
     titleEl.textContent = title;
     artistEl.textContent = artist;
     titleEl.title = title;
     artistEl.title = artist;
+    applyMarquee(titleEl);
   }
 
   const ui = {
@@ -420,4 +437,28 @@
       navigator.mediaSession.setActionHandler("nexttrack", function () { call("next"); });
     } catch (e) {}
   }
+
+  /* ---- PWA install button ---- */
+  (function () {
+    var installBtn = document.getElementById("install-btn");
+    if (!installBtn) return;
+    var deferred = null;
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      deferred = e;
+      installBtn.hidden = false;
+    });
+    installBtn.addEventListener("click", function () {
+      if (!deferred) return;
+      deferred.prompt();
+      deferred.userChoice.then(function (result) {
+        if (result.outcome === "accepted") installBtn.hidden = true;
+        deferred = null;
+      }).catch(function () {});
+    });
+    window.addEventListener("appinstalled", function () {
+      installBtn.hidden = true;
+      deferred = null;
+    });
+  })();
 })();

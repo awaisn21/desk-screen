@@ -80,7 +80,7 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  max-width: min(420px, calc(100vw - 48px));
+  width: min(420px, calc(100vw - 48px));
   padding: 10px 22px 10px 12px;
   border: 1px solid var(--glass-edge);
   border-radius: 999px;
@@ -180,6 +180,18 @@ button:focus-visible {
   text-overflow: ellipsis;
 }
 
+/* Marquee scroll for titles that overflow the pill */
+.title.marquee {
+  text-overflow: clip;
+  animation: title-scroll 12s linear infinite;
+  padding-right: 3em;
+}
+
+@keyframes title-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 .artist {
   font-size: 9.5px;
   font-weight: 600;
@@ -222,7 +234,7 @@ button:focus-visible {
      GPU flip rather than an upload */
   will-change: opacity;
   transform: translateZ(0);
-  transition: opacity 2.2s ease;
+  transition: opacity 0.7s ease;
 }
 
 .plate.on { opacity: 1; }
@@ -365,4 +377,46 @@ button:focus-visible {
 
 @media (max-width: 520px) {
   .theme-toggle { left: 20px; bottom: 28px; height: 40px; padding: 0 14px 0 10px; }
+}
+
+/* ---- PWA install button (appears above the theme toggle when available) ---- */
+.install-btn {
+  position: fixed;
+  left: 44px;
+  bottom: 100px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 16px 0 12px;
+  height: 44px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 999px;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+  backdrop-filter: blur(26px) saturate(150%);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 var(--glass-lift);
+  opacity: 0.42;
+  color: var(--ink);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.install-btn:hover { opacity: 1; }
+.install-btn[hidden] { display: none; }
+
+.install-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.install-btn:hover .install-label { color: var(--ink); }
+
+@media (max-width: 520px) {
+  .install-btn { left: 20px; bottom: 84px; height: 40px; padding: 0 14px 0 10px; }
 }

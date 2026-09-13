@@ -61,6 +61,10 @@ window.DeskThemes = (function () {
       const idx  = NAMES.indexOf(current);
       const next = NAMES[(idx + 1) % NAMES.length];
       save(next);
+      /* Clear the remembered background so the new theme opens on its own art,
+         not whatever the previous theme had saved. */
+      try { localStorage.removeItem("desk-screen:background"); } catch (e) {}
+      try { localStorage.removeItem("second-screen:background"); } catch (e) {}
       window.location.reload();
     },
 
