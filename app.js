@@ -440,27 +440,80 @@
     } catch (e) {}
   }
 
-  /* ---- PWA install button ---- */
+  /* ---- PWA install button (always visible) ---- */
   (function () {
     var installBtn = document.getElementById("install-btn");
     if (!installBtn) return;
     var deferred = null;
+    var installed = false;
+
+    /* Capture native install prompt when browser offers it */
     window.addEventListener("beforeinstallprompt", function (e) {
       e.preventDefault();
       deferred = e;
-      installBtn.hidden = false;
     });
-    installBtn.addEventListener("click", function () {
-      if (!deferred) return;
-      deferred.prompt();
-      deferred.userChoice.then(function (result) {
-        if (result.outcome === "accepted") installBtn.hidden = true;
-        deferred = null;
-      }).catch(function () {});
-    });
+
+    /* Hide only if actually installed as a PWA */
     window.addEventListener("appinstalled", function () {
+      installed = true;
       installBtn.hidden = true;
       deferred = null;
+    });
+
+    /* Detect already-running as standalone (PWA) */
+    if (window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true) {
+      installed = true;
+      installBtn.hidden = true;
+    }
+
+    installBtn.addEventListener("click", function () {
+      if (installed) return;
+
+      if (deferred) {
+        /* Chrome / Edge / Android — native prompt */
+        deferred.prompt();
+        deferred.userChoice.then(function (result) {
+          if (result.outcome === "accepted") {
+            installBtn.hidden = true;
+            installed = true;
+          }
+          deferred = null;
+        }).catch(function () {});
+        return;
+      }
+
+      /* iOS Safari or already-installed without prompt — show tooltip */
+      var tip = document.getElementById("install-tip");
+      if (!tip) {
+        tip = document.createElement("div");
+        tip.id = "install-tip";
+        tip.setAttribute("role", "tooltip");
+        tip.style.cssText = [
+          "position:fixed",
+          "left:44px",
+          "bottom:156px",
+          "max-width:240px",
+          "padding:10px 14px",
+          "border-radius:12px",
+          "background:rgba(20,20,20,0.92)",
+          "-webkit-backdrop-filter:blur(20px)",
+          "backdrop-filter:blur(20px)",
+          "color:#f8f6f2",
+          "font-size:12px",
+          "line-height:1.5",
+          "z-index:9999",
+          "pointer-events:none",
+          "box-shadow:0 8px 32px rgba(0,0,0,0.5)",
+        ].join(";");
+
+        var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        tip.textContent = isIOS
+          ? "Tap the Share button, then \"Add to Home Screen\" to install."
+          : "Open this site in Chrome or Edge and use the install button in the address bar.";
+        document.body.appendChild(tip);
+        setTimeout(function () { tip && tip.remove(); }, 4000);
+      }
     });
   })();
 })();

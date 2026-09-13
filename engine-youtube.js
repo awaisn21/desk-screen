@@ -12,41 +12,41 @@ window.EngineYouTube = (function () {
   "use strict";
 
   /* ---- Pakistan theme --------------------------------------------------- */
-  const PLAYLIST_PAKISTAN = [
-    { id: "wJJBUtzjfgg", title: "Aadat",               artist: "Jal",                 start: 0  },
-    { id: "FLKxnL7KwHw", title: "Woh Lamhe Woh Baatein", artist: "Atif Aslam",        start: 0  },
-    { id: "W31LlujrB08", title: "Sajni",               artist: "Jal",                 start: 0  },
-    { id: "ZGw4akYqcVw", title: "Hona Tha Pyaar",      artist: "Atif Aslam",          start: 0  },
-    { id: "cAu4H8olnrs", title: "Sajni",               artist: "Strings",             start: 0  },
-    { id: "f_-OZwVkB88", title: "Anjane",              artist: "Strings",             start: 0  },
-    { id: "6iRMk921AiU", title: "Tera Woh Pyar",       artist: "Momina & Asim",       start: 0  },
-    { id: "kw4tT7SCmaY", title: "Afreen Afreen",       artist: "Rahat & Momina",      start: 4  },
-    { id: "N4s4td8psB4", title: "Tajdar-e-Haram",      artist: "Atif Aslam",          start: 3  },
-    { id: "ZQMn5wIoAno", title: "Tu Kuja Man Kuja",    artist: "Shiraz Uppal",        start: 5  },
-    { id: "T94PHkuydcw", title: "Kun Faya Kun",        artist: "A.R. Rahman",         start: 30 },
-    { id: "jUDP6LmgcCE", title: "Mann Ki Lagan",       artist: "Rahat Fateh Ali Khan",start: 0  },
-    { id: "VgbGdfCyx48", title: "Sanson Ki Mala",      artist: "Rahat Fateh Ali Khan",start: 0  },
+    const PLAYLIST_PAKISTAN = [
+    { id: "WElwTD5GNTg", title: "Aadat",             artist: "Jal",                  start: 0  },
+    { id: "q_6FJRdwpm4", title: "Woh Lamhey",        artist: "Jal",                  start: 0  },
+    { id: "cdwm9Q7U02o", title: "Sajni",             artist: "Jal",                  start: 0  },
+    { id: "IW7xwSVj7gw", title: "Hona Tha Pyaar",   artist: "Atif Aslam",           start: 0  },
+    { id: "cAu4H8olnrs", title: "Sajni",             artist: "Strings",              start: 0  },
+    { id: "f_-OZwVkB88", title: "Anjane",            artist: "Strings",              start: 0  },
+    { id: "8367ETnagHo", title: "Tera Woh Pyar",     artist: "Momina & Asim",        start: 0  },
+    { id: "kw4tT7SCmaY", title: "Afreen Afreen",     artist: "Rahat & Momina",       start: 4  },
+    { id: "a18py61_F_w", title: "Tajdar-e-Haram",   artist: "Atif Aslam",           start: 3  },
+    { id: "ZQMn5wIoAno", title: "Tu Kuja Man Kuja",  artist: "Shiraz Uppal",         start: 5  },
+    { id: "T94PHkuydcw", title: "Kun Faya Kun",      artist: "A.R. Rahman",          start: 30 },
+    { id: "7e1pL9iAe6o", title: "Mann Ki Lagan",     artist: "Rahat Fateh Ali Khan", start: 0  },
+    { id: "VgbGdfCyx48", title: "Sanson Ki Mala",    artist: "Rahat Fateh Ali Khan", start: 0  },
   ];
 
   /* ---- Abstract theme (8D audio) --------------------------------------- */
-  const PLAYLIST_ABSTRACT = [
-    { id: "p53oLTSDuM0", title: "Faded",               artist: "Alan Walker",           start: 0 },
-    { id: "opeVAVcgfVY", title: "Lovely",              artist: "Billie Eilish & Khalid",start: 0 },
-    { id: "GdAmEiJKAuo", title: "Counting Stars",      artist: "OneRepublic",           start: 0 },
-    { id: "ofL4z-W5H-4", title: "Love Me Like You Do", artist: "Ellie Goulding",       start: 0 },
-    { id: "_s512A0l3no", title: "Let Me Love You",     artist: "DJ Snake & Bieber",     start: 0 },
-    { id: "ltRtSA3BOYc", title: "Shape of You",        artist: "Ed Sheeran",            start: 0 },
-    { id: "DJp6YadRfs4", title: "Señorita",            artist: "Shawn Mendes",          start: 0 },
-    { id: "uJVNZUVo8aw", title: "The Nights",          artist: "Avicii",                start: 0 },
-    { id: "ZJSdcHxg2Nk", title: "Payphone",            artist: "Maroon 5",              start: 0 },
-    { id: "vuL0SJiAOcM", title: "Take Me There",       artist: "Rascal Flatts",         start: 0 },
-    { id: "7hsF6oa-29o", title: "Belong Together",     artist: "Mark Ambor",            start: 0 },
-    { id: "WYHW9_w45Sw", title: "Calm Down",           artist: "Rema & Selena Gomez",   start: 0 },
-    { id: "ZwjmZpZ40tE", title: "Sailor Song",         artist: "Gigi Perez",            start: 0 },
-    { id: "WaYFtIY5oEw", title: "Sweater Weather",     artist: "The Neighbourhood",     start: 0 },
-    { id: "SKaojl0CLt0", title: "Serena",              artist: "Safari",                start: 0 },
-    { id: "C5Fvcb3KJfc", title: "Chemtrails",          artist: "Lana Del Rey",          start: 0 },
-    { id: "QKafzBKO3DM", title: "Die With A Smile",    artist: "Lady Gaga & Bruno Mars",start: 0 },
+    const PLAYLIST_ABSTRACT = [
+    { id: "_sdh5h_zkkk", title: "Faded",               artist: "Alan Walker",            start: 0 },
+    { id: "OjGKoT7d8PM", title: "Lovely",              artist: "Billie Eilish & Khalid", start: 0 },
+    { id: "t46IgVjkcSY", title: "Counting Stars",      artist: "OneRepublic",            start: 0 },
+    { id: "ofL4z-W5H-4", title: "Love Me Like You Do", artist: "Ellie Goulding",         start: 0 },
+    { id: "_s512A0l3no", title: "Let Me Love You",     artist: "DJ Snake & Bieber",      start: 0 },
+    { id: "YzLmxxYuCiY", title: "Shape of You",        artist: "Ed Sheeran",             start: 0 },
+    { id: "DJp6YadRfs4", title: "Señorita",            artist: "Shawn Mendes",           start: 0 },
+    { id: "uJVNZUVo8aw", title: "The Nights",          artist: "Avicii",                 start: 0 },
+    { id: "CMAM0byHa3s", title: "Payphone",            artist: "Maroon 5",               start: 0 },
+    { id: "H48EIJVfMD4", title: "Take Me There",       artist: "Rascal Flatts",          start: 0 },
+    { id: "7hsF6oa-29o", title: "Belong Together",     artist: "Mark Ambor",             start: 0 },
+    { id: "oPORJdD1A9g", title: "Calm Down",           artist: "Rema & Selena Gomez",    start: 0 },
+    { id: "JR892mrNXRM", title: "Sailor Song",         artist: "Gigi Perez",             start: 0 },
+    { id: "WaYFtIY5oEw", title: "Sweater Weather",     artist: "The Neighbourhood",      start: 0 },
+    { id: "072lEafKN7k", title: "Serena",              artist: "Safari",                 start: 0 },
+    { id: "C5Fvcb3KJfc", title: "Chemtrails",          artist: "Lana Del Rey",           start: 0 },
+    { id: "GsYbkLNIo-4", title: "Die With A Smile",   artist: "Lady Gaga & Bruno Mars", start: 0 },
   ];
 
   /* Pick playlist based on active theme */
