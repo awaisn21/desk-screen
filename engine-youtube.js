@@ -1,38 +1,58 @@
 /* ---------------------------------------------------------------------------
-   YouTube engine — streams a curated Pakistani nostalgia playlist.
+   YouTube engine — two playlists keyed on window.DESK_THEME:
+     "pakistan" → Pakistani nostalgia songs (Jal, Strings, Atif Aslam, etc.)
+     "abstract" → 8D audio Western pop (Alan Walker, Billie Eilish, etc.)
 
    No API key required. YouTube IFrame Player API is free for embedding.
    The player lives in a 1×1 hidden div; youtube-nocookie.com reduces
    tracking. YouTube handles all licensing — nothing is downloaded.
-
-   To enable: set  mode: "youtube"  in config.js, or add "youtube" to
-   the auto chain in app.js (between "files" and "ambient").
 --------------------------------------------------------------------------- */
 
 window.EngineYouTube = (function () {
   "use strict";
 
-  /* Hand-curated playlist: songs that hit the nostalgia for Pakistanis who
-     grew up in the 2000s–early 2010s. Strings, Jal, Atif Aslam, Ali Zafar,
-     Fuzon, Noori — the names you heard on PTV, at weddings, from a cousin's
-     Nokia. Shuffled fresh every session so no two plays are the same.
-
-     Video IDs verified from official / widely-archived uploads. The engine
-     skips any that become unavailable and moves to the next one. */
-  const PLAYLIST = [
-    { id: "NgEQL8UOAG4", title: "Duur",                   artist: "Strings" },
-    { id: "LxOqG2AHdxE", title: "Aankhain",               artist: "Strings" },
-    { id: "yp_xs2vaxlM", title: "Sar Kiye Yeh Pahar",     artist: "Strings" },
-    { id: "f_-OZwVkB88", title: "Anjane",                  artist: "Strings" },
-    { id: "wJJBUtzjfgg", title: "Aadat",                   artist: "Jal" },
-    { id: "FLKxnL7KwHw", title: "Woh Lamhe Woh Baatein",  artist: "Atif Aslam" },
-    { id: "Kf6MsltI7lQ", title: "Jal Pari",               artist: "Atif Aslam" },
-    { id: "B4-HoKdW6j0", title: "Jhoom",                  artist: "Ali Zafar" },
-    { id: "BCV0shv9tx0", title: "Channo",                  artist: "Ali Zafar" },
-    { id: "uMF8npZN5wE", title: "Mora Saiyaan",            artist: "Shafqat Amanat Ali" },
-    { id: "W9WjniG1wQ4", title: "Tere Bina Jiya Nahi Jaye", artist: "Fuzon" },
-    { id: "f2YKAcR1RbY", title: "Manwa Re",               artist: "Noori" },
+  /* ---- Pakistan theme --------------------------------------------------- */
+  const PLAYLIST_PAKISTAN = [
+    { id: "wJJBUtzjfgg", title: "Aadat",               artist: "Jal",                 start: 0  },
+    { id: "FLKxnL7KwHw", title: "Woh Lamhe Woh Baatein", artist: "Atif Aslam",        start: 0  },
+    { id: "W31LlujrB08", title: "Sajni",               artist: "Jal",                 start: 0  },
+    { id: "ZGw4akYqcVw", title: "Hona Tha Pyaar",      artist: "Atif Aslam",          start: 0  },
+    { id: "cAu4H8olnrs", title: "Sajni",               artist: "Strings",             start: 0  },
+    { id: "f_-OZwVkB88", title: "Anjane",              artist: "Strings",             start: 0  },
+    { id: "6iRMk921AiU", title: "Tera Woh Pyar",       artist: "Momina & Asim",       start: 0  },
+    { id: "kw4tT7SCmaY", title: "Afreen Afreen",       artist: "Rahat & Momina",      start: 4  },
+    { id: "N4s4td8psB4", title: "Tajdar-e-Haram",      artist: "Atif Aslam",          start: 3  },
+    { id: "ZQMn5wIoAno", title: "Tu Kuja Man Kuja",    artist: "Shiraz Uppal",        start: 5  },
+    { id: "T94PHkuydcw", title: "Kun Faya Kun",        artist: "A.R. Rahman",         start: 30 },
+    { id: "jUDP6LmgcCE", title: "Mann Ki Lagan",       artist: "Rahat Fateh Ali Khan",start: 0  },
+    { id: "VgbGdfCyx48", title: "Sanson Ki Mala",      artist: "Rahat Fateh Ali Khan",start: 0  },
   ];
+
+  /* ---- Abstract theme (8D audio) --------------------------------------- */
+  const PLAYLIST_ABSTRACT = [
+    { id: "p53oLTSDuM0", title: "Faded",               artist: "Alan Walker",           start: 0 },
+    { id: "opeVAVcgfVY", title: "Lovely",              artist: "Billie Eilish & Khalid",start: 0 },
+    { id: "GdAmEiJKAuo", title: "Counting Stars",      artist: "OneRepublic",           start: 0 },
+    { id: "ofL4z-W5H-4", title: "Love Me Like You Do", artist: "Ellie Goulding",       start: 0 },
+    { id: "_s512A0l3no", title: "Let Me Love You",     artist: "DJ Snake & Bieber",     start: 0 },
+    { id: "ltRtSA3BOYc", title: "Shape of You",        artist: "Ed Sheeran",            start: 0 },
+    { id: "DJp6YadRfs4", title: "Señorita",            artist: "Shawn Mendes",          start: 0 },
+    { id: "uJVNZUVo8aw", title: "The Nights",          artist: "Avicii",                start: 0 },
+    { id: "ZJSdcHxg2Nk", title: "Payphone",            artist: "Maroon 5",              start: 0 },
+    { id: "vuL0SJiAOcM", title: "Take Me There",       artist: "Rascal Flatts",         start: 0 },
+    { id: "7hsF6oa-29o", title: "Belong Together",     artist: "Mark Ambor",            start: 0 },
+    { id: "WYHW9_w45Sw", title: "Calm Down",           artist: "Rema & Selena Gomez",   start: 0 },
+    { id: "ZwjmZpZ40tE", title: "Sailor Song",         artist: "Gigi Perez",            start: 0 },
+    { id: "WaYFtIY5oEw", title: "Sweater Weather",     artist: "The Neighbourhood",     start: 0 },
+    { id: "SKaojl0CLt0", title: "Serena",              artist: "Safari",                start: 0 },
+    { id: "C5Fvcb3KJfc", title: "Chemtrails",          artist: "Lana Del Rey",          start: 0 },
+    { id: "QKafzBKO3DM", title: "Die With A Smile",    artist: "Lady Gaga & Bruno Mars",start: 0 },
+  ];
+
+  /* Pick playlist based on active theme */
+  const PLAYLIST = (window.DESK_THEME === "pakistan")
+    ? PLAYLIST_PAKISTAN
+    : PLAYLIST_ABSTRACT;
 
   /* ---- Fisher-Yates shuffle ---- */
   function shuffle(arr) {
@@ -57,12 +77,9 @@ window.EngineYouTube = (function () {
   return {
     name: "youtube",
 
-    /* available whenever the YouTube engine is explicitly requested or
-       the auto-chain reaches it; the IFrame API itself has no key */
     available: function () {
       const cfg = window.CONFIG || {};
       if (cfg.mode === "youtube") return true;
-      /* also available when mode is auto and no files/spotify are set up */
       return !cfg.clientId && !(window.TRACKS && window.TRACKS.length);
     },
 
@@ -75,14 +92,11 @@ window.EngineYouTube = (function () {
       ui.playing(false);
 
       return new Promise(function (resolve) {
-        /* If the YT global is already loaded (e.g. Spotify page also loaded
-           it), go straight to building the player */
         if (window.YT && window.YT.Player) {
           createPlayer(resolve);
           return;
         }
 
-        /* Chain onto any existing callback so we don't clobber it */
         const prev = window.onYouTubeIframeAPIReady;
         window.onYouTubeIframeAPIReady = function () {
           if (prev) try { prev(); } catch (e) {}
@@ -122,7 +136,6 @@ window.EngineYouTube = (function () {
   /* ---- internals ---- */
 
   function createPlayer(done) {
-    /* A 1×1 invisible div: the IFrame API requires a real DOM node */
     const host = document.createElement("div");
     host.id = "yt-player-host";
     host.setAttribute("aria-hidden", "true");
@@ -131,22 +144,24 @@ window.EngineYouTube = (function () {
       "bottom:0;left:0;z-index:-1;";
     document.body.appendChild(host);
 
+    const track = queue[cursor];
     player = new window.YT.Player("yt-player-host", {
       height: "1",
       width: "1",
-      videoId: queue[cursor].id,
-      host: "https://www.youtube-nocookie.com",  /* reduced tracking */
+      videoId: track.id,
+      host: "https://www.youtube-nocookie.com",
       playerVars: {
         autoplay:        0,
         controls:        0,
         disablekb:       1,
         fs:              0,
-        iv_load_policy:  3,   /* hide annotations */
+        iv_load_policy:  3,
         modestbranding:  1,
         rel:             0,
         origin:          window.location.origin || "http://127.0.0.1",
         enablejsapi:     1,
         playsinline:     1,
+        start:           track.start || 0,
       },
       events: {
         onReady: function () {
@@ -164,9 +179,7 @@ window.EngineYouTube = (function () {
     if (e.data === S.PLAYING) {
       playing = true;
       ui.playing(true);
-      /* Update meta from the actual video (handles any auto-advance) */
       ui.track(queue[cursor].title, queue[cursor].artist);
-      /* Progress ring: poll while playing */
       pollProgress();
     } else if (e.data === S.PAUSED) {
       playing = false;
@@ -178,7 +191,7 @@ window.EngineYouTube = (function () {
   }
 
   function onError() {
-    /* Video unavailable (geo-block, takedown, etc.) — skip silently */
+    /* Video unavailable — skip silently */
     cursor = (cursor + 1) % queue.length;
     loadTrack();
   }
@@ -186,14 +199,14 @@ window.EngineYouTube = (function () {
   function loadTrack() {
     if (!player) return;
     try {
-      player.loadVideoById(queue[cursor].id);
+      const track = queue[cursor];
+      player.loadVideoById({ videoId: track.id, startSeconds: track.start || 0 });
       playing = true;
       ui.playing(true);
-      ui.track(queue[cursor].title, queue[cursor].artist);
+      ui.track(track.title, track.artist);
     } catch (e) {}
   }
 
-  /* Drive the progress ring from the video's current time */
   let pollTimer = null;
   function pollProgress() {
     if (pollTimer) return;
