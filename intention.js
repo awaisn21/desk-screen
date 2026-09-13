@@ -27,7 +27,7 @@
   if (!wrap || !input || !display) return;
 
   function showDisplay(text) {
-    display.textContent = "— " + text + " —";
+    display.textContent = text;
     display.classList.add("on");
   }
 

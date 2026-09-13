@@ -108,7 +108,7 @@
         const scale = Math.max(size.w / iw, size.h / ih);
         const dw = iw * scale;
         const dh = ih * scale;
-        ctx.imageSmoothingQuality = "high";
+        ctx.imageSmoothingQuality = "medium";
         ctx.fillStyle = entry.base || "#0b0b0f";
         ctx.fillRect(0, 0, size.w, size.h);
         ctx.drawImage(img, (size.w - dw) / 2, (size.h - dh) / 2, dw, dh);
@@ -124,10 +124,12 @@
     canvases.forEach(function (c, n) { c.classList.toggle("on", n === i); });
   }
 
-  /* draw everything that is not drawn yet, one at a time, while idle */
+  /* Pre-warm only the 2 backgrounds adjacent to the current one while idle.
+     Pre-painting all backgrounds (especially large JPGs) makes the page feel
+     sluggish; paint-on-demand for the rest is fast enough since they are cached. */
   function warmArtwork() {
     const queue = [];
-    for (let n = 1; n <= library.length; n++) {
+    for (let n = 1; n <= 2; n++) {
       const i = wrapIndex(current + n);
       if (!drawn[i] && !library[i].video) queue.push(i);
     }
