@@ -38,7 +38,7 @@ window.DeskThemes = (function () {
   }
 
   /* Determine starting theme: stored choice → default "abstract" */
-  const current = NAMES.includes(stored()) ? stored() : "abstract";
+  const current = NAMES.includes(stored()) ? stored() : "pakistan";
 
   /* Expose so app.js can filter the backgrounds library */
   window.DESK_THEME = current;

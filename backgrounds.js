@@ -1,16 +1,29 @@
-/* Written by sync.py — your edits here are replaced on the next run. */
+/* Hand-curated — update when art/ changes. sync.py regenerates this but
+   you can also edit it directly; run sync.py after adding new art files.   */
 window.BACKGROUNDS = [
-  {"name": "Alpine Valley", "base": "#515c68", "src": "art/alpine-valley.svg"},
-  {"name": "Aurora Watch", "base": "#1a3642", "src": "art/aurora-watch.svg"},
-  {"name": "Focus Landscape", "base": "#3f5b79", "src": "art/focus-landscape.svg"},
-  {"name": "Hill Town", "base": "#785464", "src": "art/hill-town.svg"},
-  {"name": "Ocean Shore", "base": "#829395", "src": "art/ocean-shore.svg"},
-  {"name": "Pk 01 J ReK9 49vE", "base": "#5f5944", "src": "art/pk-01-J-ReK9-49vE.jpg"},
-  {"name": "Pk 02 4dz8IdRLILA", "base": "#3c4340", "src": "art/pk-02-4dz8IdRLILA.jpg"},
-  {"name": "Pk 03 ZWqyPO3bAbI", "base": "#87817f", "src": "art/pk-03-ZWqyPO3bAbI.jpg"},
-  {"name": "Pk 04 Safak FnLaZ0yK19I", "base": "#424038", "src": "art/pk-04-safak-FnLaZ0yK19I.jpg"},
-  {"name": "Pk 05 Safak NT3oIjHbegU", "base": "#5d5c54", "src": "art/pk-05-safak-NT3oIjHbegU.jpg"},
-  {"name": "Pk 06 Li NSmPsFBk", "base": "#7a6b5c", "src": "art/pk-06-Li-NSmPsFBk.jpg"},
-  {"name": "Pk 07 L LGkl0M6r8", "base": "#968b82", "src": "art/pk-07-l_lGkl0M6r8.jpg"},
-  {"name": "Sunset Bay", "base": "#72395d", "src": "art/sunset-bay.svg"},
+
+  /* ---- Abstract: vector art ---- */
+  { "name": "Alpine Valley",   "base": "#515c68", "src": "art/alpine-valley.svg"           },
+  { "name": "Focus Landscape", "base": "#3f5b79", "src": "art/focus-landscape.svg"         },
+  { "name": "Hill Town",       "base": "#785464", "src": "art/hill-town.svg"               },
+  { "name": "Sunset Bay",      "base": "#72395d", "src": "art/sunset-bay.svg"              },
+  { "name": "Volcanic Night",  "base": "#1a0e12", "src": "art/1a-volcanic-night.svg"       },
+  { "name": "Arctic Dawn",     "base": "#2a3d50", "src": "art/1b-arctic-dawn.svg"          },
+  { "name": "Salt Flat Dusk",  "base": "#7a5040", "src": "art/1c-salt-flat-dusk.svg"       },
+
+  /* ---- Abstract: looping video ---- */
+  { "name": "Hill Town Alive", "base": "#785464", "video": "art/video/Hill Town Alive.mp4", "poster": "art/hill-town.svg" },
+  { "name": "Ocean Shore",     "base": "#829395", "video": "art/video/ocean-shore.mp4"     },
+  { "name": "Sunset Bay Live", "base": "#72395d", "video": "art/video/sunset-bay.mp4",    "poster": "art/sunset-bay.svg" },
+  { "name": "Sunset Valley",   "base": "#8a6a4a", "video": "art/video/sunset-valley.mp4"  },
+
+  /* ---- Pakistan: cinematic photography ---- */
+  { "name": "pk-Lahore I",   "base": "#5f5944", "src": "art/pk-01-J-ReK9-49vE.jpg"       },
+  { "name": "pk-Lahore II",  "base": "#3c4340", "src": "art/pk-02-4dz8IdRLILA.jpg"       },
+  { "name": "pk-Lahore III", "base": "#87817f", "src": "art/pk-03-ZWqyPO3bAbI.jpg"       },
+  { "name": "pk-Lahore IV",  "base": "#424038", "src": "art/pk-04-safak-FnLaZ0yK19I.jpg" },
+  { "name": "pk-Lahore V",   "base": "#5d5c54", "src": "art/pk-05-safak-NT3oIjHbegU.jpg" },
+  { "name": "pk-Lahore VI",  "base": "#7a6b5c", "src": "art/pk-06-Li-NSmPsFBk.jpg"       },
+  { "name": "pk-Lahore VII", "base": "#968b82", "src": "art/pk-07-l_lGkl0M6r8.jpg"       },
+
 ];

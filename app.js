@@ -226,10 +226,10 @@
   function timeBasedArtIndex() {
     var h = new Date().getHours();
     var sets;
-    if      (h >= 5  && h < 11) sets = ["ocean-shore", "alpine-valley"];
-    else if (h >= 11 && h < 17) sets = ["focus-landscape", "hill-town"];
-    else if (h >= 17 && h < 21) sets = ["sunset-bay", "crimson-eclipse"];
-    else                         sets = ["aurora-watch", "nightfloor"];
+    if      (h >= 5  && h < 11) sets = ["Arctic Dawn", "Alpine Valley", "Ocean Shore"];
+    else if (h >= 11 && h < 17) sets = ["Focus Landscape", "Hill Town"];
+    else if (h >= 17 && h < 21) sets = ["Sunset Bay", "Salt Flat Dusk"];
+    else                         sets = ["Volcanic Night", "Sunset Valley"];
 
     for (var s = 0; s < sets.length; s++) {
       for (var k = 0; k < library.length; k++) {
