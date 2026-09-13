@@ -300,23 +300,27 @@ button:focus-visible {
   color: rgba(248, 246, 242, 0.18);
 }
 
-/* Faint italic line shown above the player once the intention is set */
+/* Intention display — bold and readable on every background */
 #intention-display {
   position: fixed;
   left: 50%;
   bottom: 116px;
   transform: translateX(-50%);
-  max-width: min(480px, calc(100vw - 80px));
+  max-width: min(520px, calc(100vw - 80px));
   font-family: "Newsreader", ui-serif, Georgia, serif;
-  font-size: 13px;
+  font-size: 15px;
   font-style: italic;
-  font-weight: 400;
-  color: rgba(248, 246, 242, 0.28);
+  font-weight: 500;
+  color: rgba(248, 246, 242, 0.97);
+  letter-spacing: 0.02em;
+  text-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.98),
+    0 0  18px rgba(0, 0, 0, 0.85),
+    0 0  50px rgba(0, 0, 0, 0.55);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
-  letter-spacing: 0.01em;
   pointer-events: none;
   opacity: 0;
   transition: opacity 1s ease;

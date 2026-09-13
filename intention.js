@@ -1,16 +1,24 @@
 /* ---------------------------------------------------------------------------
-   Session intention — a focus anchor shown on every visit.
+   Session intention — a focus anchor shown on every fresh visit.
 
-   On every page load a prompt asks "What are you working on?"
-   The answer is kept in memory and shown as a faint italic line above
-   the player for the rest of the session. Press I to change it.
-   Resets on refresh — intentionally: set it fresh each time you sit down.
+   On load, checks sessionStorage (survives theme/image reloads; cleared
+   when the tab closes). If nothing saved → prompt. This means changing
+   the theme or background does NOT re-ask — only opening a new tab does.
+   Press I to change the intention at any time.
 --------------------------------------------------------------------------- */
 
 (function () {
   "use strict";
 
-  var sessionIntention = null;
+  const KEY = "desk-screen:intention-session";
+
+  function load() {
+    try { return sessionStorage.getItem(KEY) || null; } catch (e) { return null; }
+  }
+
+  function save(text) {
+    try { sessionStorage.setItem(KEY, text); } catch (e) {}
+  }
 
   const wrap    = document.getElementById("intention-wrap");
   const input   = document.getElementById("intention-input");
@@ -19,7 +27,7 @@
   if (!wrap || !input || !display) return;
 
   function showDisplay(text) {
-    display.textContent = text;
+    display.textContent = "— " + text + " —";
     display.classList.add("on");
   }
 
@@ -44,27 +52,27 @@
     closePrompt();
     var clean = (text || "").trim();
     if (!clean) return;
-    sessionIntention = clean;
+    save(clean);
     showDisplay(clean);
   }
 
-  /* Prevent player shortcuts (space, arrows) from firing while typing */
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter")  { e.preventDefault(); commit(input.value); }
     if (e.key === "Escape") { e.preventDefault(); closePrompt(); }
     e.stopPropagation();
   });
 
-  /* I key: open the prompt to change the intention */
   document.addEventListener("keydown", function (e) {
     if (wrap.classList.contains("open")) return;
     if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
-    if (e.key === "i" || e.key === "I") {
-      clearDisplay();
-      openPrompt();
-    }
+    if (e.key === "i" || e.key === "I") { clearDisplay(); openPrompt(); }
   });
 
-  /* Boot: always prompt on every visit */
-  setTimeout(openPrompt, 1400);
+  /* Boot: restore from this session or prompt */
+  var saved = load();
+  if (saved) {
+    showDisplay(saved);
+  } else {
+    setTimeout(openPrompt, 1400);
+  }
 })();
