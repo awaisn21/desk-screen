@@ -5,14 +5,14 @@ window.BACKGROUNDS = [
   /* ---- Abstract: vector art ---- */
   { "name": "Alpine Valley",   "base": "#515c68", "src": "art/alpine-valley.svg"           },
   { "name": "Focus Landscape", "base": "#3f5b79", "src": "art/focus-landscape.svg"         },
-  { "name": "Hill Town",       "base": "#785464", "src": "art/hill-town.svg"               },
+  { "name": "Hill Town",       "base": "#785464", "src": "art/hill-town.jpg"               },
   { "name": "Sunset Bay",      "base": "#72395d", "src": "art/sunset-bay.svg"              },
   { "name": "Volcanic Night",  "base": "#1a0e12", "src": "art/1a-volcanic-night.svg"       },
   { "name": "Arctic Dawn",     "base": "#2a3d50", "src": "art/1b-arctic-dawn.svg"          },
   { "name": "Salt Flat Dusk",  "base": "#7a5040", "src": "art/1c-salt-flat-dusk.svg"       },
 
   /* ---- Abstract: looping video ---- */
-  { "name": "Hill Town Alive", "base": "#785464", "video": "art/video/Hill Town Alive.mp4", "poster": "art/hill-town.svg" },
+  { "name": "Hill Town Alive", "base": "#785464", "video": "art/video/Hill Town Alive.mp4", "poster": "art/hill-town.jpg" },
   { "name": "Ocean Shore",     "base": "#829395", "video": "art/video/ocean-shore.mp4"     },
   { "name": "Sunset Bay Live", "base": "#72395d", "video": "art/video/sunset-bay.mp4",    "poster": "art/sunset-bay.svg" },
   { "name": "Sunset Valley",   "base": "#8a6a4a", "video": "art/video/sunset-valley.mp4"  },
