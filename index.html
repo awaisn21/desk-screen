@@ -107,11 +107,34 @@
 <script src="app.js"></script>
 <script src="intention.js"></script>
 <script>
-if ("serviceWorker" in navigator) {
+(function () {
+  if (!("serviceWorker" in navigator) || !("caches" in window)) return;
+
+  /* Self-heal: if any old SW cache exists (pre-v4), evict it so
+     users who were stuck on a stale build get fresh files immediately
+     on this load rather than waiting for a second navigation. */
+  caches.has("desk-screen-v4").then(function (current) {
+    if (current) return; // already on v4, nothing to do
+    return Promise.all([
+      navigator.serviceWorker.getRegistrations().then(function (rs) {
+        return Promise.all(rs.map(function (r) { return r.unregister(); }));
+      }),
+      caches.keys().then(function (ks) {
+        return Promise.all(ks.map(function (k) { return caches.delete(k); }));
+      })
+    ]).then(function () {
+      /* Reload once — no SW in control now, gets fresh HTML from network */
+      if (!sessionStorage.getItem("sw-healed")) {
+        sessionStorage.setItem("sw-healed", "1");
+        window.location.reload();
+      }
+    });
+  });
+
   window.addEventListener("load", function () {
     navigator.serviceWorker.register("/sw.js").catch(function () {});
   });
-}
+})();
 </script>
 </body>
 </html>

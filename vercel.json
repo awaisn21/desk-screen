@@ -2,6 +2,15 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "headers": [
     {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store"
+        }
+      ]
+    },
+    {
       "source": "/art/(.*)",
       "headers": [
         {
@@ -24,7 +33,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=3600"
+          "value": "no-cache"
         }
       ]
     },

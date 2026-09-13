@@ -1,13 +1,13 @@
 /* ---------------------------------------------------------------------------
-   Desk Screen — service worker  (v3)
+   Desk Screen — service worker  (v4)
 
-   Shell (HTML/CSS/JS): cached on install, served from cache indefinitely.
+   Shell (HTML/CSS/JS): network-first with cache fallback for offline.
    Art + video: stale-while-revalidate — serve instantly from cache, refresh
    in the background so new art appears on the next visit without any delay
    on the current one. This makes repeat visits nearly instant offline.
 --------------------------------------------------------------------------- */
 
-const CACHE = "desk-screen-v3";
+const CACHE = "desk-screen-v4";
 
 const SHELL = [
   "/",
@@ -72,17 +72,17 @@ self.addEventListener("fetch", function (e) {
     return;
   }
 
-  /* Shell: cache-first */
+  /* Shell: network-first → always serves fresh JS/HTML on new deploys.
+     Falls back to cache so the app still loads when offline. */
   e.respondWith(
-    caches.match(e.request).then(function (cached) {
-      if (cached) return cached;
-      return fetch(e.request).then(function (res) {
-        if (res && res.status === 200 && res.type !== "opaque") {
-          const clone = res.clone();
-          caches.open(CACHE).then(function (c) { c.put(e.request, clone); });
-        }
-        return res;
-      });
+    fetch(e.request).then(function (res) {
+      if (res && res.status === 200 && res.type !== "opaque") {
+        var clone = res.clone();
+        caches.open(CACHE).then(function (c) { c.put(e.request, clone); });
+      }
+      return res;
+    }).catch(function () {
+      return caches.match(e.request);
     })
   );
 });
