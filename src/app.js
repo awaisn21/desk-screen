@@ -195,8 +195,17 @@
   const start = remembered();
   show(start >= 0 ? start : timeBasedArtIndex());
 
-  /* prime the next 3 backgrounds after the first paint settles */
-  setTimeout(warmArtwork, 200);
+  /* Paint all inlined (data-URI) backgrounds immediately — no network cost.
+     File-path images are warmed lazily (next 3 neighbours) as before. */
+  setTimeout(function () {
+    library.forEach(function (entry, i) {
+      if (!entry.video && !drawn[i]) {
+        var s = entry.src || entry.poster || "";
+        if (s.indexOf("data:") === 0) paint(i);
+      }
+    });
+    warmArtwork();   /* also warm the next 3 file-path images */
+  }, 100);
 
   /* ---- the pill ---------------------------------------------------------- */
 
