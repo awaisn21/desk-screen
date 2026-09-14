@@ -18,7 +18,7 @@ window.EngineYouTube = (function () {
     { id: "cdwm9Q7U02o", title: "Sajni",             artist: "Jal",                  start: 0  },
     { id: "IW7xwSVj7gw", title: "Hona Tha Pyaar",   artist: "Atif Aslam",           start: 0  },
     { id: "cAu4H8olnrs", title: "Sajni",             artist: "Strings",              start: 0  },
-    { id: "f_-OZwVkB88", title: "Anjane",            artist: "Strings",              start: 0  },
+    { id: "NMltrZ6rwvs", title: "Tu Mera Nahin",     artist: "Rizwan Anwar",         start: 0  },
     { id: "8367ETnagHo", title: "Tera Woh Pyar",     artist: "Momina & Asim",        start: 0  },
     { id: "kw4tT7SCmaY", title: "Afreen Afreen",     artist: "Rahat & Momina",       start: 4  },
     { id: "a18py61_F_w", title: "Tajdar-e-Haram",   artist: "Atif Aslam",           start: 3  },
@@ -45,7 +45,7 @@ window.EngineYouTube = (function () {
     { id: "JR892mrNXRM", title: "Sailor Song",         artist: "Gigi Perez",             start: 0 },
     { id: "WaYFtIY5oEw", title: "Sweater Weather",     artist: "The Neighbourhood",      start: 0 },
     { id: "072lEafKN7k", title: "Serena",              artist: "Safari",                 start: 0 },
-    { id: "C5Fvcb3KJfc", title: "Chemtrails",          artist: "Lana Del Rey",           start: 0 },
+    { id: "tAIwQaLoi6I", title: "Chemtrails",          artist: "Lana Del Rey",           start: 0 },
     { id: "GsYbkLNIo-4", title: "Die With A Smile",   artist: "Lady Gaga & Bruno Mars", start: 0 },
   ];
 
@@ -117,6 +117,7 @@ window.EngineYouTube = (function () {
           player.pauseVideo();
           pendingPlay = false;
         } else {
+          if (ui && ui.loading) ui.loading();
           player.playVideo();
         }
       } catch (e) {}
