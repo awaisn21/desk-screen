@@ -68,6 +68,16 @@
     if (e.key === "i" || e.key === "I") { clearDisplay(); openPrompt(); }
   });
 
+  /* Click the displayed intention to edit it inline */
+  display.style.cursor = "pointer";
+  display.setAttribute("title", "Click to edit");
+  display.addEventListener("click", function () {
+    if (!display.classList.contains("on")) return;
+    input.value = display.textContent || "";
+    clearDisplay();
+    openPrompt();
+  });
+
   /* Boot: restore from this session or prompt */
   var saved = load();
   if (saved) {
