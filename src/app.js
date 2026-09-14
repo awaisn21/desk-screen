@@ -271,6 +271,12 @@
       const f = Math.max(0, Math.min(1, fraction || 0));
       ring.setAttribute("stroke-dashoffset", (CIRCUMFERENCE * (1 - f)).toFixed(2));
     },
+
+    loading: function () {
+      player.setAttribute("data-state", "loading");
+      playBtn.setAttribute("data-state", "loading");
+      playIcon.setAttribute("d", PLAY_PATH);
+    },
   };
 
   /* ---- choose an engine --------------------------------------------------- */
@@ -301,6 +307,7 @@
   if (!engine) {
     ui.notice("No music yet", "Add files to music/ or a Spotify client ID");
   } else {
+    ui.loading();
     Promise.resolve(engine.init(ui)).catch(function () {
       ui.notice("Something went wrong", "Check the browser console");
     });

@@ -70,7 +70,7 @@ window.EngineYouTube = (function () {
   let cursor      = 0;
   let playing     = false;
   let apiReady    = false;
-  let pendingPlay = false;   /* toggle() called before player was ready */
+  let pendingPlay = true;    /* auto-play on first interaction / player ready */
 
   /* ---- public interface ---- */
 
@@ -89,7 +89,7 @@ window.EngineYouTube = (function () {
       cursor = 0;
 
       ui.track(queue[cursor].title, queue[cursor].artist);
-      ui.playing(false);
+      if (ui.loading) ui.loading();
 
       return new Promise(function (resolve) {
         if (window.YT && window.YT.Player) {
@@ -181,6 +181,8 @@ window.EngineYouTube = (function () {
       ui.playing(true);
       ui.track(queue[cursor].title, queue[cursor].artist);
       pollProgress();
+    } else if (e.data === S.BUFFERING) {
+      if (ui.loading) ui.loading();
     } else if (e.data === S.PAUSED) {
       playing = false;
       ui.playing(false);
