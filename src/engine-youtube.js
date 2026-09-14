@@ -25,7 +25,7 @@ window.EngineYouTube = (function () {
     { id: "ZQMn5wIoAno", title: "Tu Kuja Man Kuja",  artist: "Shiraz Uppal",         start: 5  },
     { id: "T94PHkuydcw", title: "Kun Faya Kun",      artist: "A.R. Rahman",          start: 30 },
     { id: "7e1pL9iAe6o", title: "Mann Ki Lagan",     artist: "Rahat Fateh Ali Khan", start: 0  },
-    { id: "VgbGdfCyx48", title: "Sanson Ki Mala",    artist: "Rahat Fateh Ali Khan", start: 0  },
+    { id: "5ScNf7xaBXc", title: "Sanson Ki Mala",    artist: "Rahat Fateh Ali Khan", start: 0  },
   ];
 
   /* ---- Abstract theme (8D audio) --------------------------------------- */
