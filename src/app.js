@@ -67,80 +67,44 @@
   const canvases = library.map(makeCanvas);
   const drawn = library.map(function () { return false; });
 
-  function makeCanvas() {
-    const c = document.createElement("canvas");
-    c.className = "plate";
-    c.setAttribute("aria-hidden", "true");
-    stage.appendChild(c);
-    return c;
+  function makeCanvas(entry) {
+    const div = document.createElement("div");
+    div.className = "plate";
+    div.style.backgroundColor = entry.base || "#0b0b0f";
+    div.setAttribute("aria-hidden", "true");
+    stage.appendChild(div);
+    return div;
   }
 
   function wrapIndex(i) {
     return ((i % library.length) + library.length) % library.length;
   }
 
-  function targetSize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const cap = 2560;                       /* enough for any laptop display */
-    let w = Math.round(window.innerWidth * dpr);
-    let h = Math.round(window.innerHeight * dpr);
-    if (w > cap) { h = Math.round(h * (cap / w)); w = cap; }
-    return { w: Math.max(1, w), h: Math.max(1, h) };
-  }
-
-  /* draw one artwork into its canvas, cropped like background-size: cover */
+  /* paint: set CSS background-image on the div immediately.
+     The browser renders progressively — base colour shows at once,
+     image pixels appear as network bytes arrive. No promise needed. */
   function paint(i) {
     const entry = library[i];
     const src = entry.src || entry.poster;
-    const canvas = canvases[i];
-    if (!src || !canvas) return Promise.resolve(false);
-
-    const size = targetSize();
-    return new Promise(function (done) {
-      const img = new Image();
-      img.decoding = "async";
-      img.onload = function () {
-        canvas.width = size.w;
-        canvas.height = size.h;
-        const ctx = canvas.getContext("2d", { alpha: false });
-        const iw = img.naturalWidth || size.w;
-        const ih = img.naturalHeight || size.h;
-        const scale = Math.max(size.w / iw, size.h / ih);
-        const dw = iw * scale;
-        const dh = ih * scale;
-        ctx.imageSmoothingQuality = "medium";
-        ctx.fillStyle = entry.base || "#0b0b0f";
-        ctx.fillRect(0, 0, size.w, size.h);
-        ctx.drawImage(img, (size.w - dw) / 2, (size.h - dh) / 2, dw, dh);
-        drawn[i] = true;
-        done(true);
-      };
-      img.onerror = function () { done(false); };
-      img.src = src;
-    });
+    const plate = canvases[i];
+    if (!plate || drawn[i]) return;
+    plate.style.backgroundColor = entry.base || "#0b0b0f";
+    if (src) plate.style.backgroundImage = "url('" + src + "')";
+    drawn[i] = true;
   }
 
   function reveal(i) {
     canvases.forEach(function (c, n) { c.classList.toggle("on", n === i); });
   }
 
-  /* Pre-warm only the 2 backgrounds adjacent to the current one while idle.
-     Pre-painting all backgrounds (especially large JPGs) makes the page feel
-     sluggish; paint-on-demand for the rest is fast enough since they are cached. */
+  /* Pre-warm the 3 backgrounds adjacent to the current one.
+     paint() is now synchronous (CSS background-image), so this is cheap — 
+     it just sets a URL; the browser fetches in the background. */
   function warmArtwork() {
-    const queue = [];
-    for (let n = 1; n <= 2; n++) {
+    for (let n = 1; n <= 3; n++) {
       const i = wrapIndex(current + n);
-      if (!drawn[i] && !library[i].video) queue.push(i);
+      if (!drawn[i] && !library[i].video) paint(i);
     }
-    (function step() {
-      const i = queue.shift();
-      if (i === undefined) return;
-      paint(i).then(function () {
-        if (window.requestIdleCallback) requestIdleCallback(step, { timeout: 900 });
-        else setTimeout(step, 60);
-      });
-    })();
   }
 
   function show(index) {
@@ -173,11 +137,8 @@
 
     if (clip) { clip.pause(); clip.removeAttribute("src"); clip.load(); clip.hidden = true; }
 
-    if (drawn[want]) {
-      reveal(want);                       /* the common case: instant */
-    } else {
-      paint(want).then(function () { if (current === want) reveal(want); });
-    }
+    if (!drawn[want]) paint(want);
+    reveal(want);                         /* instant: base colour → image */
     label(entry);
   }
 
@@ -189,18 +150,7 @@
     );
   }
 
-  /* a resized window means every canvas is the wrong size now */
-  let resizeTimer = null;
-  window.addEventListener("resize", function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function () {
-      const size = targetSize();
-      const c = canvases[current];
-      if (c && c.width === size.w && c.height === size.h) return;
-      for (let i = 0; i < drawn.length; i++) drawn[i] = false;
-      paint(current).then(function () { reveal(current); warmArtwork(); });
-    }, 300);
-  });
+  /* No resize handler needed — CSS background-size: cover scales automatically. */
 
   const background = document.getElementById("background");
 
@@ -245,9 +195,8 @@
   const start = remembered();
   show(start >= 0 ? start : timeBasedArtIndex());
 
-  /* fetch the rest once the first one is on screen */
-  if (window.requestIdleCallback) requestIdleCallback(warmArtwork, { timeout: 1500 });
-  else setTimeout(warmArtwork, 300);
+  /* prime the next 3 backgrounds after the first paint settles */
+  setTimeout(warmArtwork, 200);
 
   /* ---- the pill ---------------------------------------------------------- */
 

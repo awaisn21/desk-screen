@@ -97,15 +97,15 @@
 </div>
 
 <script src="config.js"></script>
-<script src="themes.js"></script>
-<script src="backgrounds.js"></script>
 <script src="tracks.js"></script>
-<script src="engine-spotify.js"></script>
-<script src="engine-files.js"></script>
-<script src="engine-ambient.js"></script>
-<script src="engine-youtube.js"></script>
-<script src="app.js"></script>
-<script src="intention.js"></script>
+<script src="src/themes.js"></script>
+<script src="src/backgrounds.js"></script>
+<script src="src/engine-spotify.js"></script>
+<script src="src/engine-files.js"></script>
+<script src="src/engine-ambient.js"></script>
+<script src="src/engine-youtube.js"></script>
+<script src="src/app.js"></script>
+<script src="src/intention.js"></script>
 <script>
 (function () {
   if (!("serviceWorker" in navigator) || !("caches" in window)) return;
@@ -113,7 +113,7 @@
   /* Self-heal: if any old SW cache exists (pre-v4), evict it so
      users who were stuck on a stale build get fresh files immediately
      on this load rather than waiting for a second navigation. */
-  caches.has("desk-screen-v4").then(function (current) {
+  caches.has("desk-screen-v5").then(function (current) {
     if (current) return; // already on v4, nothing to do
     return Promise.all([
       navigator.serviceWorker.getRegistrations().then(function (rs) {

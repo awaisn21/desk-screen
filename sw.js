@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------
-   Desk Screen — service worker  (v4)
+   Desk Screen — service worker  (v5)
 
    Shell (HTML/CSS/JS): network-first with cache fallback for offline.
    Art + video: stale-while-revalidate — serve instantly from cache, refresh
@@ -7,22 +7,22 @@
    on the current one. This makes repeat visits nearly instant offline.
 --------------------------------------------------------------------------- */
 
-const CACHE = "desk-screen-v4";
+const CACHE = "desk-screen-v5";
 
 const SHELL = [
   "/",
   "/index.html",
   "/style.css",
-  "/app.js",
-  "/intention.js",
-  "/engine-ambient.js",
-  "/engine-files.js",
-  "/engine-spotify.js",
-  "/engine-youtube.js",
   "/config.js",
   "/tracks.js",
-  "/backgrounds.js",
-  "/themes.js",
+  "/src/themes.js",
+  "/src/backgrounds.js",
+  "/src/engine-spotify.js",
+  "/src/engine-files.js",
+  "/src/engine-ambient.js",
+  "/src/engine-youtube.js",
+  "/src/app.js",
+  "/src/intention.js",
 ];
 
 self.addEventListener("install", function (e) {
