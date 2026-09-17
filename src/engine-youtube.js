@@ -50,7 +50,7 @@ window.EngineYouTube = (function () {
     { id: "oPORJdD1A9g", title: "Calm Down",           artist: "Rema & Selena Gomez",    start: 0 },
     { id: "JR892mrNXRM", title: "Sailor Song",         artist: "Gigi Perez",             start: 0 },
     { id: "WaYFtIY5oEw", title: "Sweater Weather",     artist: "The Neighbourhood",      start: 0 },
-    { id: "072lEafKN7k", title: "Serena",              artist: "Safari",                 start: 0 },
+    { id: "AZDNyw5xfO0", title: "Closer",              artist: "The Chainsmokers",        start: 0 },
     { id: "tAIwQaLoi6I", title: "Chemtrails",          artist: "Lana Del Rey",           start: 0 },
     { id: "GsYbkLNIo-4", title: "Die With A Smile",   artist: "Lady Gaga & Bruno Mars", start: 0 },
   ];

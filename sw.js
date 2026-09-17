@@ -7,7 +7,7 @@
    on the current one. This makes repeat visits nearly instant offline.
 --------------------------------------------------------------------------- */
 
-const CACHE = "desk-screen-v15";
+const CACHE = "desk-screen-v17";
 
 const SHELL = [
   "/",
@@ -23,24 +23,22 @@ const SHELL = [
   "/src/engine-youtube.js",
   "/src/app.js",
   "/src/intention.js",
-                  /* Art — pre-cached on install so repeat visits (and offline) are instant */
-  "/art/1a-volcanic-night.jpg",
-  "/art/1b-arctic-dawn.jpg",
-  "/art/1c-salt-flat-dusk.jpg",
-  "/art/alpine-valley.jpg",
-  "/art/focus-landscape.jpg",
-  "/art/hill-town.jpg",
-  "/art/sunset-bay.jpg",
-  "/art/pk-01-J-ReK9-49vE.webp",
-  "/art/pk-02-4dz8IdRLILA.webp",
-  "/art/pk-03-ZWqyPO3bAbI.webp",
-  "/art/pk-04-safak-FnLaZ0yK19I.webp",
-  "/art/pk-05-safak-NT3oIjHbegU.webp",
-  "/art/pk-06-Li-NSmPsFBk.webp",
-  "/art/pk-07-l_lGkl0M6r8.webp",
-  "/art/pk-08-huzaifa.webp",
-  "/art/pk-09-kehkishan.webp",
-  "/art/pk-10-muhammad-hussam.webp",
+                      /* Art — pre-cached on install so repeat visits (and offline) are instant */
+  "/art/abstract/1a-volcanic-night.jpg",
+  "/art/abstract/1b-arctic-dawn.jpg",
+  "/art/abstract/1c-salt-flat-dusk.jpg",
+  "/art/abstract/alpine-valley.jpg",
+  "/art/abstract/focus-landscape.jpg",
+  "/art/abstract/hill-town.jpg",
+  "/art/abstract/sunset-bay.jpg",
+  "/art/pakistan/pk-01-J-ReK9-49vE.webp",
+  "/art/pakistan/pk-02-4dz8IdRLILA.webp",
+  "/art/pakistan/pk-04-safak-FnLaZ0yK19I.webp",
+  "/art/pakistan/pk-05-safak-NT3oIjHbegU.webp",
+  "/art/pakistan/pk-06-Li-NSmPsFBk.webp",
+  "/art/pakistan/pk-07-l_lGkl0M6r8.webp",
+  "/art/pakistan/pk-09-kehkishan.webp",
+  "/art/pakistan/pk-10-muhammad-hussam.webp",
 ];
 
 self.addEventListener("install", function (e) {

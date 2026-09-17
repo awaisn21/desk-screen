@@ -34,7 +34,9 @@ import sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 MUSIC_DIR = os.path.join(ROOT, "music")
-ART_DIR   = os.path.join(ROOT, "art")
+ART_DIR      = os.path.join(ROOT, "art")
+ART_ABSTRACT = os.path.join(ROOT, "art", "abstract")
+ART_PAKISTAN = os.path.join(ROOT, "art", "pakistan")
 VIDEO_DIR = os.path.join(ROOT, "video")
 SW_PATH   = os.path.join(ROOT, "sw.js")
 BG_PATH   = os.path.join(ROOT, "src", "backgrounds.js")
@@ -210,25 +212,21 @@ def write_backgrounds():
     abstract = []
     pakistan = []
 
-    all_names = listing(ART_DIR, IMAGE_EXT)
-    pk_names  = [n for n in all_names if n.lower().startswith("pk-")]
-    ab_names  = [n for n in all_names if not n.lower().startswith("pk-")]
-
-    # Deduplicate: abstract prefers .jpg, pakistan prefers .webp
-    ab_names = dedupe_by_stem(ab_names, ".jpg")
-    pk_names = dedupe_by_stem(pk_names, ".webp")
-
+    # Abstract: art/abstract/ (prefer .jpg)
+    ab_names = dedupe_by_stem(listing(ART_ABSTRACT, IMAGE_EXT), ".jpg")
     for n in ab_names:
-        key  = "art/" + n
-        path = os.path.join(ART_DIR, n)
+        key  = "art/abstract/" + n
+        path = os.path.join(ART_ABSTRACT, n)
         stem = os.path.splitext(n)[0]
         measured = average_colour(path)
         base     = known.get(key, measured) if measured == "#0b0b0f" else measured
         abstract.append({"name": pretty_name(clean_name(stem)), "base": base, "src": key})
 
+    # Pakistan: art/pakistan/ (prefer .webp)
+    pk_names = dedupe_by_stem(listing(ART_PAKISTAN, IMAGE_EXT), ".webp")
     for n in pk_names:
-        key  = "art/" + n
-        path = os.path.join(ART_DIR, n)
+        key  = "art/pakistan/" + n
+        path = os.path.join(ART_PAKISTAN, n)
         stem = os.path.splitext(n)[0]
         measured = average_colour(path)
         base     = known.get(key, measured) if measured == "#0b0b0f" else measured

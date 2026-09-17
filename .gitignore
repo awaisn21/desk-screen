@@ -16,8 +16,11 @@ _quarantine/
 
 .DS_Store
 
-# anything parked in a subfolder is not part of the site
-art/*/
+# video and junk subdirs are not part of the site
+art/video/
+art/webp_out/
+art/placeholders/
 video/*/
+# art/abstract/ and art/pakistan/ ARE tracked — do not ignore them
 .vercel
 .env*
