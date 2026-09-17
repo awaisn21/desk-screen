@@ -19,7 +19,7 @@ window.EngineYouTube = (function () {
 
   /* ---- Pakistan theme --------------------------------------------------- */
   const PLAYLIST_PAKISTAN = [
-    { id: "WElwTD5GNTg", title: "Aadat",             artist: "Jal",                  start: 0  },
+    { id: "AKUk1v3rBvc", title: "Aadat",             artist: "Atif Aslam",            start: 0  },
     { id: "q_6FJRdwpm4", title: "Woh Lamhey",        artist: "Jal",                  start: 0  },
     { id: "cdwm9Q7U02o", title: "Sajni",             artist: "Jal",                  start: 0  },
     { id: "IW7xwSVj7gw", title: "Hona Tha Pyaar",   artist: "Atif Aslam",           start: 0  },

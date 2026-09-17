@@ -11,7 +11,7 @@ window.BACKGROUNDS = [
   {"name": "Sunset Bay", "base": "#763a5d", "src": "art/abstract/sunset-bay.jpg"},
 
   /* ---- Pakistan: cinematic photography ---- */
-  {"name": "pk-Lahore II", "base": "#3c4340", "src": "art/pakistan/pk-02-4dz8IdRLILA.webp"},
+  {"name": "pk-Lahore II", "base": "#8f928e", "src": "art/pakistan/pk-02-4dz8IdRLILA.webp"},
   {"name": "pk-Lahore IV", "base": "#444138", "src": "art/pakistan/pk-04-safak-FnLaZ0yK19I.webp"},
   {"name": "pk-Lahore V", "base": "#5e5d54", "src": "art/pakistan/pk-05-safak-NT3oIjHbegU.webp"},
   {"name": "pk-Lahore VI", "base": "#7c6c5c", "src": "art/pakistan/pk-06-Li-NSmPsFBk.webp"},
