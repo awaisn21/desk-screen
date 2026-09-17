@@ -1,0 +1,220 @@
+From 98dbd7d3ff59b4e3b9d02012e6680836995fc768 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 13 Sep 2026 12:51:09 +0000
+Subject: [PATCH] Fix theme switching, pill width, marquee titles, and add PWA
+ install
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- themes.js: clear remembered background on cycle() so art actually
+  changes when switching themes (was persisting old theme's art)
+- style.css: change max-width to width on .player so pill is always
+  the same fixed size regardless of song name length
+- style.css: reduce .plate transition from 2.2s to 0.7s for snappier
+  background switching
+- style.css + app.js: marquee scroll for long song titles instead of
+  truncation — title duplicates and scrolls at ~45px/s when it overflows
+- index.html + app.js + style.css: PWA install button in bottom-left
+  above the theme toggle; appears via beforeinstallprompt, hides on install
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01UMFWJjeo86k55Rs5VhyMSi
+---
+ app.js     | 49 +++++++++++++++++++++++++++++++++++++++++++++
+ index.html |  5 +++++
+ style.css  | 58 ++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ themes.js  |  4 ++++
+ 4 files changed, 114 insertions(+), 2 deletions(-)
+
+diff --git a/app.js b/app.js
+index 599a6c6..0b4bce9 100644
+--- a/app.js
++++ b/app.js
+@@ -267,11 +267,32 @@
+   const PLAY_PATH = "M7 4.6v14.8a.9.9 0 0 0 1.38.76l11.4-7.4a.9.9 0 0 0 0-1.52L8.38 3.84A.9.9 0 0 0 7 4.6z";
+   const PAUSE_PATH = "M6.6 4h3.4v16H6.6zM14 4h3.4v16H14z";
+ 
++  /* Duplicate the title text so the marquee can loop seamlessly */
++  function applyMarquee(el) {
++    el.classList.remove("marquee");
++    /* measureEl lives off-screen to get the natural text width */
++    var probe = el.cloneNode(true);
++    probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;overflow:visible;width:auto;animation:none;";
++    document.body.appendChild(probe);
++    var textWidth = probe.scrollWidth;
++    document.body.removeChild(probe);
++    /* .meta container is roughly half the pill; measure the .title slot */
++    var slotWidth = el.parentElement ? el.parentElement.offsetWidth : 160;
++    if (textWidth > slotWidth) {
++      /* Build "Title   Title" so scrolling looks seamless */
++      el.textContent = el.textContent + "      " + el.textContent;
++      el.classList.add("marquee");
++      /* Adjust speed to content length (~60px/s) */
++      el.style.animationDuration = Math.round(textWidth / 45) + "s";
++    }
++  }
++
+   function text(title, artist) {
+     titleEl.textContent = title;
+     artistEl.textContent = artist;
+     titleEl.title = title;
+     artistEl.title = artist;
++    applyMarquee(titleEl);
+   }
+ 
+   const ui = {
+@@ -420,4 +441,32 @@
+       navigator.mediaSession.setActionHandler("nexttrack", function () { call("next"); });
+     } catch (e) {}
+   }
++
++  /* ---- PWA install button ------------------------------------------------- */
++  (function () {
++    var installBtn = document.getElementById("install-btn");
++    if (!installBtn) return;
++
++    var deferred = null;
++
++    window.addEventListener("beforeinstallprompt", function (e) {
++      e.preventDefault();
++      deferred = e;
++      installBtn.hidden = false;
++    });
++
++    installBtn.addEventListener("click", function () {
++      if (!deferred) return;
++      deferred.prompt();
++      deferred.userChoice.then(function (result) {
++        if (result.outcome === "accepted") installBtn.hidden = true;
++        deferred = null;
++      }).catch(function () {});
++    });
++
++    window.addEventListener("appinstalled", function () {
++      installBtn.hidden = true;
++      deferred = null;
++    });
++  })();
+ })();
+diff --git a/index.html b/index.html
+index 3613c5c..8447a3a 100644
+--- a/index.html
++++ b/index.html
+@@ -43,6 +43,11 @@
+   <svg class="theme-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2z"/><path d="M10 2a5.6 5.6 0 0 1 0 16A8 8 0 0 1 10 2z" fill="currentColor" stroke="none" opacity="0.3"/></svg>
+ </button>
+ 
++<button class="install-btn" id="install-btn" type="button" aria-label="Install Desk Screen" hidden>
++  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="15" height="15"><path d="M10 3v9m0 0-3-3m3 3 3-3"/><rect x="3" y="14" width="14" height="3" rx="1.2" fill="currentColor" stroke="none" opacity="0.25"/><path d="M3 15.5h14"/></svg>
++  <span class="install-label">Install</span>
++</button>
++
+ <button class="background" id="background" type="button" aria-label="Change background">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+diff --git a/style.css b/style.css
+index 8ef72a8..3f096f8 100644
+--- a/style.css
++++ b/style.css
+@@ -80,7 +80,7 @@ body {
+   display: flex;
+   align-items: center;
+   gap: 14px;
+-  max-width: min(420px, calc(100vw - 48px));
++  width: min(420px, calc(100vw - 48px));
+   padding: 10px 22px 10px 12px;
+   border: 1px solid var(--glass-edge);
+   border-radius: 999px;
+@@ -180,6 +180,18 @@ button:focus-visible {
+   text-overflow: ellipsis;
+ }
+ 
++/* Marquee scroll for titles that overflow the pill */
++.title.marquee {
++  text-overflow: clip;
++  animation: title-scroll 12s linear infinite;
++  padding-right: 3em; /* gap before the text loops */
++}
++
++@keyframes title-scroll {
++  0%   { transform: translateX(0); }
++  100% { transform: translateX(-50%); }
++}
++
+ .artist {
+   font-size: 9.5px;
+   font-weight: 600;
+@@ -222,7 +234,7 @@ button:focus-visible {
+      GPU flip rather than an upload */
+   will-change: opacity;
+   transform: translateZ(0);
+-  transition: opacity 2.2s ease;
++  transition: opacity 0.7s ease;
+ }
+ 
+ .plate.on { opacity: 1; }
+@@ -366,3 +378,45 @@ button:focus-visible {
+ @media (max-width: 520px) {
+   .theme-toggle { left: 20px; bottom: 28px; height: 40px; padding: 0 14px 0 10px; }
+ }
++
++/* ---- PWA install button (appears above the theme toggle when available) ---- */
++.install-btn {
++  position: fixed;
++  left: 44px;
++  bottom: 100px; /* sits above the theme toggle */
++  display: flex;
++  align-items: center;
++  gap: 7px;
++  padding: 0 16px 0 12px;
++  height: 44px;
++  border: 1px solid var(--glass-edge);
++  border-radius: 999px;
++  background: var(--glass);
++  -webkit-backdrop-filter: blur(26px) saturate(150%);
++  backdrop-filter: blur(26px) saturate(150%);
++  box-shadow:
++    0 10px 40px rgba(0, 0, 0, 0.30),
++    inset 0 1px 0 var(--glass-lift);
++  opacity: 0.42;
++  color: var(--ink);
++  cursor: pointer;
++  transition: opacity 0.2s ease;
++}
++
++.install-btn:hover { opacity: 1; }
++.install-btn[hidden] { display: none; }
++
++.install-label {
++  font-size: 9.5px;
++  font-weight: 600;
++  letter-spacing: 0.14em;
++  text-transform: uppercase;
++  color: var(--ink-muted);
++  white-space: nowrap;
++}
++
++.install-btn:hover .install-label { color: var(--ink); }
++
++@media (max-width: 520px) {
++  .install-btn { left: 20px; bottom: 84px; height: 40px; padding: 0 14px 0 10px; }
++}
+diff --git a/themes.js b/themes.js
+index 88c6048..7bd92be 100644
+--- a/themes.js
++++ b/themes.js
+@@ -61,6 +61,10 @@ window.DeskThemes = (function () {
+       const idx  = NAMES.indexOf(current);
+       const next = NAMES[(idx + 1) % NAMES.length];
+       save(next);
++      /* Clear the remembered background so the new theme opens on its own art,
++         not whatever the previous theme had saved. */
++      try { localStorage.removeItem("desk-screen:background"); } catch (e) {}
++      try { localStorage.removeItem("second-screen:background"); } catch (e) {}
+       window.location.reload();
+     },
+ 
+-- 
+2.43.0
+
