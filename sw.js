@@ -7,7 +7,7 @@
    on the current one. This makes repeat visits nearly instant offline.
 --------------------------------------------------------------------------- */
 
-const CACHE = "desk-screen-v24";
+const CACHE = "desk-screen-v26";
 
 const SHELL = [
   "/",
@@ -23,13 +23,19 @@ const SHELL = [
   "/src/engine-youtube.js",
   "/src/app.js",
   "/src/intention.js",
-                                    /* Art — pre-cached on install so repeat visits (and offline) are instant */
+                                        /* Art — pre-cached on install so repeat visits (and offline) are instant */
   "/art/abstract/1a-volcanic-night.jpg",
   "/art/abstract/1b-arctic-dawn.jpg",
   "/art/abstract/1c-salt-flat-dusk.jpg",
+  "/art/abstract/alpine-dawn.webp",
   "/art/abstract/alpine-valley.jpg",
+  "/art/abstract/autumn-road.webp",
+  "/art/abstract/city-rooftop.webp",
+  "/art/abstract/desert-oasis.webp",
   "/art/abstract/focus-landscape.jpg",
   "/art/abstract/hill-town.jpg",
+  "/art/abstract/lighthouse-dusk.webp",
+  "/art/abstract/night-cabin.webp",
   "/art/abstract/sunset-bay.jpg",
   "/art/pakistan/pk-02-4dz8IdRLILA.webp",
   "/art/pakistan/pk-04-safak-FnLaZ0yK19I.webp",

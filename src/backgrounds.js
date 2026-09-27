@@ -5,9 +5,15 @@ window.BACKGROUNDS = [
   {"name": "Volcanic Night", "base": "#251726", "src": "art/abstract/1a-volcanic-night.jpg"},
   {"name": "Arctic Dawn", "base": "#416177", "src": "art/abstract/1b-arctic-dawn.jpg"},
   {"name": "Salt Flat Dusk", "base": "#6e5f72", "src": "art/abstract/1c-salt-flat-dusk.jpg"},
+  {"name": "Alpine Dawn", "base": "#9f92ab", "src": "art/abstract/alpine-dawn.webp"},
   {"name": "Alpine Valley", "base": "#535f6b", "src": "art/abstract/alpine-valley.jpg"},
+  {"name": "Autumn Road", "base": "#dc9c70", "src": "art/abstract/autumn-road.webp"},
+  {"name": "City Rooftop", "base": "#2a3249", "src": "art/abstract/city-rooftop.webp"},
+  {"name": "Desert Oasis", "base": "#442f53", "src": "art/abstract/desert-oasis.webp"},
   {"name": "Focus Landscape", "base": "#405d7a", "src": "art/abstract/focus-landscape.jpg"},
   {"name": "Hill Town", "base": "#7b5564", "src": "art/abstract/hill-town.jpg"},
+  {"name": "Lighthouse Dusk", "base": "#835c6c", "src": "art/abstract/lighthouse-dusk.webp"},
+  {"name": "Night Cabin", "base": "#38343a", "src": "art/abstract/night-cabin.webp"},
   {"name": "Sunset Bay", "base": "#763a5d", "src": "art/abstract/sunset-bay.jpg"},
 
   /* ---- Pakistan: cinematic photography ---- */
