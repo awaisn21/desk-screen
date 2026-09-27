@@ -267,8 +267,6 @@ button:focus-visible {
 
 .plate.on { opacity: 1; }
 
-  #intention-display { bottom: 100px; }
-}
 
 /* ---- theme toggle (bottom-left corner) ---- */
 .theme-toggle {
