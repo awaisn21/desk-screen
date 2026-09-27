@@ -2,9 +2,6 @@
 window.BACKGROUNDS = [
 
   /* ---- Abstract: vector art ---- */
-  {"name": "Volcanic Night", "base": "#251726", "src": "art/abstract/1a-volcanic-night.jpg"},
-  {"name": "Arctic Dawn", "base": "#416177", "src": "art/abstract/1b-arctic-dawn.jpg"},
-  {"name": "Salt Flat Dusk", "base": "#6e5f72", "src": "art/abstract/1c-salt-flat-dusk.jpg"},
   {"name": "Alpine Dawn", "base": "#9f92ab", "src": "art/abstract/alpine-dawn.webp"},
   {"name": "Alpine Valley", "base": "#535f6b", "src": "art/abstract/alpine-valley.jpg"},
   {"name": "Autumn Road", "base": "#dc9c70", "src": "art/abstract/autumn-road.webp"},
